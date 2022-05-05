@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import styled from "@mui/material/styles";
 
-function Grid() {
+function Grid({ attempts }) {
   return (
     <Box
       sx={{
@@ -12,9 +12,9 @@ function Grid() {
     >
       {Array(6)
         .fill()
-        .map((_, index) => (
+        .map((_, rowIndex) => (
           <Box
-            key={index}
+            key={rowIndex}
             direction={"row"}
             spacing={1}
             sx={{
@@ -25,8 +25,9 @@ function Grid() {
           >
             {Array(5)
               .fill()
-              .map((_, index) => (
+              .map((_, cellIndex) => (
                 <Box
+                  key={cellIndex}
                   sx={{
                     width: "4rem",
                     height: "4rem",
@@ -38,7 +39,9 @@ function Grid() {
                     alignItems: "center",
                   }}
                 >
-                  A
+                  {attempts[rowIndex] && attempts[rowIndex][cellIndex]
+                    ? attempts[rowIndex][cellIndex]
+                    : ""}
                 </Box>
               ))}
           </Box>
