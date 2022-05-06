@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "./components/Grid";
@@ -6,6 +6,7 @@ import Keyboard from "./components/Keyboard";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
 const SECRET = "TRAIN";
+
 function Wordle() {
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
@@ -52,11 +53,9 @@ function Wordle() {
         }}
       >
         <Grid
-          attempts={
-            currentAttempt.length
-              ? [...previousAttempts, currentAttempt.join("")]
-              : [...previousAttempts]
-          }
+          previousAttempts={previousAttempts}
+          currentAttempt={currentAttempt}
+          secret={SECRET}
         />
         <Keyboard />
       </Box>
