@@ -1,43 +1,10 @@
 import Box from "@mui/material/Box";
-import { useMemo } from "react";
 
-const getBgColor = (attempt, secret, secretLetterMap) => {
-  const map = { ...secretLetterMap };
-  const bgColors = [];
-  attempt.split("").forEach((character, index) => {
-    if (secret[index] === character) {
-      map[character] -= 1;
-      bgColors.push("green");
-    } else if (secret.indexOf(character) !== -1 && map[character] !== 0) {
-      map[character] -= 1;
-      bgColors.push("yellow");
-    } else {
-      bgColors.push("gray");
-    }
-  });
-  return bgColors;
-};
-
-const getSecretLetterMap = (secret) => {
-  return secret.split("").reduce((map, char) => {
-    if (char in map) {
-      map[char]++;
-    } else {
-      map[char] = 1;
-    }
-    return map;
-  }, {});
-};
-
-function Grid({ previousAttempts, currentAttempt, secret }) {
-  const secretLetterMap = useMemo(() => getSecretLetterMap(secret), [secret]);
-
+function Grid({ previousAttempts, currentAttempt, previousAttemptColors }) {
   let remainingAttempts =
     6 - previousAttempts.length - (currentAttempt.length ? 1 : 0);
   const previousAttemptRows = previousAttempts.length
     ? previousAttempts.map((attempt, attemptIndex) => {
-        const bgColors = getBgColor(attempt, secret, secretLetterMap);
-        console.log("bgColors", bgColors);
         return (
           <Box
             key={`${attempt}${attemptIndex}`}
@@ -61,7 +28,10 @@ function Grid({ previousAttempts, currentAttempt, secret }) {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: bgColors[characterIndex],
+                  backgroundColor:
+                    (previousAttemptColors[attemptIndex] &&
+                      previousAttemptColors[attemptIndex][characterIndex]) ||
+                    "white",
                 }}
               >
                 {character}

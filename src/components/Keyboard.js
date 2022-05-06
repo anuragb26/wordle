@@ -32,7 +32,20 @@ const renderKeyBoardRow = (letters, isLastRow) => {
   return keyboardButtons;
 };
 
-function Keyboard() {
+function Keyboard({ previousAttempts, previousAttemptColors }) {
+  const charactersMap = previousAttempts.reduce(
+    (map, previousAttempt, attemptIndex) => {
+      previousAttempt.split("").forEach((character, characterIndex) => {
+        map[character] =
+          (previousAttemptColors[attemptIndex] &&
+            previousAttemptColors[attemptIndex][characterIndex]) ||
+          "gray";
+      });
+      return map;
+    },
+    {}
+  );
+  console.log("charactersMap", charactersMap);
   return (
     <Box sx={{ flex: "1", marginTop: "2rem" }}>
       {["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].map((letters, index) => (
