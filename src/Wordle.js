@@ -39,8 +39,13 @@ const secretLetterMap = getSecretLetterMap(SECRET);
 function Wordle() {
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
+  const previousAttemptsLength = previousAttempts.length;
   useEffect(() => {
     const handleKeyPress = (event) => {
+      if (gameOver) {
+        return;
+      }
       if (
         ALPHABETS.indexOf(String.fromCharCode(event.keyCode).toUpperCase()) >
           -1 &&
@@ -51,20 +56,16 @@ function Wordle() {
           String.fromCharCode(event.keyCode).toUpperCase(),
         ]);
       }
-      if (event.key === "Enter") {
-        if (currentAttempt.length === 5 && currentAttempt.join("") === SECRET) {
-          alert("GAME OVER");
-        }
-        if (currentAttempt.length === 5 && currentAttempt.join("") !== SECRET) {
-          setCurrentAttempt([]);
-          setPreviousAttempts((previousAttempts) => [
-            ...previousAttempts,
-            {
-              attempt: currentAttempt.join(""),
-              bgColor: getBgColor(currentAttempt, SECRET, secretLetterMap),
-            },
-          ]);
-        }
+      if (event.key === "Enter" && currentAttempt.length === 5) {
+        setCurrentAttempt([]);
+        setPreviousAttempts((previousAttempts) => [
+          ...previousAttempts,
+          {
+            attempt: currentAttempt.join(""),
+            bgColor: getBgColor(currentAttempt, SECRET, secretLetterMap),
+          },
+        ]);
+        setGameOver(currentAttempt.join("") === SECRET);
       }
       if (event.key === "Backspace" && currentAttempt.length) {
         setCurrentAttempt((currentAttempt) => currentAttempt.slice(0, -1));
@@ -72,7 +73,16 @@ function Wordle() {
     };
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
-  }, [currentAttempt]);
+  }, [currentAttempt, gameOver]);
+  useEffect(() => {
+    if (previousAttemptsLength === 6 && !gameOver) {
+      setTimeout(() => alert("Better luck next time!"), 500);
+      setGameOver(true);
+    }
+    if (previousAttemptsLength < 6 && gameOver) {
+      setTimeout(() => alert("You Win"), 500);
+    }
+  }, [previousAttemptsLength, gameOver]);
   return (
     <Container maxWidth="sm">
       <Box
