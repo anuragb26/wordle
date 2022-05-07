@@ -1,26 +1,37 @@
+import React, { useMemo } from "react";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import BackspaceIcon from "@mui/icons-material/Backspace";
+import { COLORS } from "../enums";
 
-const KeyboardButton = styled(Button)(({ theme }) => ({
+const KeyboardButton = styled(Button, {
+  shouldForwardProp: (props) => props !== "backgroundColor",
+})(({ theme, backgroundColor }) => ({
   height: "3rem",
   minWidth: "1.5rem",
   textAlign: "center",
-  backgroundColor: "#d3d6da",
+  backgroundColor,
   marginRight: "0.5rem",
   marginBottom: "0.5rem",
   color: "black",
   fontWeight: "bolder",
 }));
 
-const renderKeyBoardRow = (letters, isLastRow) => {
+const renderKeyBoardRow = (letters, characterColorMap, isLastRow) => {
   const keyboardButtons = [];
   if (isLastRow) {
     keyboardButtons.push(<KeyboardButton>Enter</KeyboardButton>);
   }
   for (const letter of letters) {
-    keyboardButtons.push(<KeyboardButton>{letter}</KeyboardButton>);
+    const backgroundColor = characterColorMap[letter]
+      ? characterColorMap[letter]
+      : COLORS.KEYBOARD_GRAY;
+    keyboardButtons.push(
+      <KeyboardButton backgroundColor={backgroundColor}>
+        {letter}
+      </KeyboardButton>
+    );
   }
   if (isLastRow) {
     keyboardButtons.push(
@@ -32,20 +43,30 @@ const renderKeyBoardRow = (letters, isLastRow) => {
   return keyboardButtons;
 };
 
-function Keyboard({ previousAttempts, previousAttemptColors }) {
-  const charactersMap = previousAttempts.reduce(
-    (map, previousAttempt, attemptIndex) => {
-      previousAttempt.split("").forEach((character, characterIndex) => {
-        map[character] =
-          (previousAttemptColors[attemptIndex] &&
-            previousAttemptColors[attemptIndex][characterIndex]) ||
-          "gray";
-      });
-      return map;
-    },
-    {}
+const COLOR_HIERARCHY = {
+  [COLORS.KEYBOARD_GRAY]: 1,
+  [COLORS.GRAY]: 2,
+  [COLORS.YELLOW]: 3,
+  [COLORS.GREEN]: 4,
+};
+
+const getCharacterMap = (previousAttempts) =>
+  previousAttempts.reduce((map, { attempt, bgColor }) => {
+    attempt.split("").forEach((character, index) => {
+      const existingColor = map[character] || COLORS.KEYBOARD_GRAY;
+      const currentColor = bgColor[index];
+      const existingColorNumber = COLOR_HIERARCHY[existingColor];
+      const currentColorNumber = COLOR_HIERARCHY[currentColor];
+      map[character] =
+        currentColorNumber > existingColorNumber ? currentColor : existingColor;
+    });
+    return map;
+  }, {});
+function Keyboard({ previousAttempts }) {
+  const characterColorMap = useMemo(
+    () => getCharacterMap(previousAttempts),
+    [previousAttempts]
   );
-  console.log("charactersMap", charactersMap);
   return (
     <Box sx={{ flex: "1", marginTop: "2rem" }}>
       {["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].map((letters, index) => (
@@ -57,7 +78,7 @@ function Keyboard({ previousAttempts, previousAttemptColors }) {
             width: "100%",
           }}
         >
-          {renderKeyBoardRow(letters, index === 2)}
+          {renderKeyBoardRow(letters, characterColorMap, index === 2)}
         </Box>
       ))}
     </Box>

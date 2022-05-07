@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 
-function Grid({ previousAttempts, currentAttempt, previousAttemptColors }) {
+function Grid({ previousAttempts, currentAttempt }) {
   let remainingAttempts =
     6 - previousAttempts.length - (currentAttempt.length ? 1 : 0);
   const previousAttemptRows = previousAttempts.length
-    ? previousAttempts.map((attempt, attemptIndex) => {
+    ? previousAttempts.map(({ attempt, bgColor }, attemptIndex) => {
         return (
           <Box
             key={`${attempt}${attemptIndex}`}
@@ -28,10 +28,7 @@ function Grid({ previousAttempts, currentAttempt, previousAttemptColors }) {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor:
-                    (previousAttemptColors[attemptIndex] &&
-                      previousAttemptColors[attemptIndex][characterIndex]) ||
-                    "white",
+                  backgroundColor: bgColor[characterIndex],
                 }}
               >
                 {character}

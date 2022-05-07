@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
+import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
 const SECRET = "TRAIN";
@@ -10,15 +11,15 @@ const SECRET = "TRAIN";
 const getBgColor = (attempt, secret, secretLetterMap) => {
   const map = { ...secretLetterMap };
   const bgColors = [];
-  attempt.split("").forEach((character, index) => {
+  attempt.forEach((character, index) => {
     if (secret[index] === character) {
       map[character] -= 1;
-      bgColors.push("green");
+      bgColors.push(COLORS.GREEN);
     } else if (secret.indexOf(character) !== -1 && map[character] !== 0) {
       map[character] -= 1;
-      bgColors.push("yellow");
+      bgColors.push(COLORS.YELLOW);
     } else {
-      bgColors.push("gray");
+      bgColors.push(COLORS.GRAY);
     }
   });
   return bgColors;
@@ -38,7 +39,6 @@ const secretLetterMap = getSecretLetterMap(SECRET);
 function Wordle() {
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
-  const [previousAttemptColors, setPreviousAttemptColors] = useState([]);
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (
@@ -59,7 +59,10 @@ function Wordle() {
           setCurrentAttempt([]);
           setPreviousAttempts((previousAttempts) => [
             ...previousAttempts,
-            currentAttempt.join(""),
+            {
+              attempt: currentAttempt.join(""),
+              bgColor: getBgColor(currentAttempt, SECRET, secretLetterMap),
+            },
           ]);
         }
       }
@@ -69,16 +72,7 @@ function Wordle() {
     };
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
-  }, [currentAttempt, previousAttempts.length]);
-  const jsonPrevAttempts = JSON.stringify(previousAttempts);
-  useEffect(() => {
-    const colors = [];
-    const attempts = JSON.parse(jsonPrevAttempts);
-    attempts.forEach((previousAttempt) => {
-      colors.push(getBgColor(previousAttempt, SECRET, secretLetterMap));
-    });
-    setPreviousAttemptColors(colors);
-  }, [jsonPrevAttempts, setPreviousAttemptColors]);
+  }, [currentAttempt]);
   return (
     <Container maxWidth="sm">
       <Box
@@ -92,14 +86,8 @@ function Wordle() {
         <Grid
           previousAttempts={previousAttempts}
           currentAttempt={currentAttempt}
-          secret={SECRET}
-          secretLetterMap={secretLetterMap}
-          previousAttemptColors={previousAttemptColors}
         />
-        <Keyboard
-          previousAttempts={previousAttempts}
-          previousAttemptColors={previousAttemptColors}
-        />
+        <Keyboard previousAttempts={previousAttempts} />
       </Box>
     </Container>
   );
