@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import PlayForWorkIcon from "@mui/icons-material/PlayForWork";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 
 export default function ResponsiveAppBar() {
   return (
@@ -34,7 +34,7 @@ export default function ResponsiveAppBar() {
               alignItems: "center",
             }}
           >
-            <PlayForWorkIcon
+            <PsychologyIcon
               sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
             />
             <Typography
