@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import { COLORS } from "../enums";
 
@@ -16,13 +17,24 @@ const KeyboardButton = styled(Button, {
   marginBottom: "0.5rem",
   color: "black",
   fontWeight: "bolder",
+  "&:hover": {
+    backgroundColor,
+  },
+  "&:focus": {
+    backgroundColor,
+  },
 }));
 
-const renderKeyBoardRow = (letters, characterColorMap, isLastRow) => {
+const renderKeyBoardRow = (letters, characterColorMap, onClick, isLastRow) => {
   const keyboardButtons = [];
   if (isLastRow) {
     keyboardButtons.push(
-      <KeyboardButton backgroundColor={COLORS.KEYBOARD_GRAY}>
+      <KeyboardButton
+        backgroundColor={COLORS.KEYBOARD_GRAY}
+        onClick={() => onClick({ key: "Enter" })}
+        disableRipple={true}
+        disableFocusRipple={true}
+      >
         Enter
       </KeyboardButton>
     );
@@ -32,14 +44,24 @@ const renderKeyBoardRow = (letters, characterColorMap, isLastRow) => {
       ? characterColorMap[letter]
       : COLORS.KEYBOARD_GRAY;
     keyboardButtons.push(
-      <KeyboardButton backgroundColor={backgroundColor}>
+      <KeyboardButton
+        backgroundColor={backgroundColor}
+        onClick={() => onClick({ key: letter })}
+        disableRipple={true}
+        disableFocusRipple={true}
+      >
         {letter}
       </KeyboardButton>
     );
   }
   if (isLastRow) {
     keyboardButtons.push(
-      <KeyboardButton backgroundColor={COLORS.KEYBOARD_GRAY}>
+      <KeyboardButton
+        backgroundColor={COLORS.KEYBOARD_GRAY}
+        onClick={() => onClick({ key: "Backspace" })}
+        disableRipple={true}
+        disableFocusRipple={true}
+      >
         <BackspaceIcon />
       </KeyboardButton>
     );
@@ -66,7 +88,7 @@ const getCharacterMap = (previousAttempts) =>
     });
     return map;
   }, {});
-function Keyboard({ previousAttempts }) {
+function Keyboard({ previousAttempts, onClick }) {
   const characterColorMap = useMemo(
     () => getCharacterMap(previousAttempts),
     [previousAttempts]
@@ -82,7 +104,7 @@ function Keyboard({ previousAttempts }) {
             width: "100%",
           }}
         >
-          {renderKeyBoardRow(letters, characterColorMap, index === 2)}
+          {renderKeyBoardRow(letters, characterColorMap, onClick, index === 2)}
         </Box>
       ))}
     </Box>

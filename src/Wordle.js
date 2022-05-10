@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -15,7 +15,7 @@ const getBgColor = (attempt, secret, secretLetterMap) => {
   const map = { ...secretLetterMap };
   const bgColors = [];
   attempt.forEach((character, index) => {
-    if (secret[index] === character) {
+    if (secret[index] === character && map[character] !== 0) {
       map[character] -= 1;
       bgColors.push(COLORS.GREEN);
     } else if (secret.indexOf(character) !== -1 && map[character] !== 0) {
@@ -44,19 +44,18 @@ function Wordle() {
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const previousAttemptsLength = previousAttempts.length;
-  useEffect(() => {
-    const handleKeyPress = (event) => {
+  const handleKeyPress = useCallback(
+    (event) => {
       if (gameOver) {
         return;
       }
       if (
-        ALPHABETS.indexOf(String.fromCharCode(event.keyCode).toUpperCase()) >
-          -1 &&
+        ALPHABETS.indexOf(event.key.toUpperCase()) > -1 &&
         currentAttempt.length < 5
       ) {
         setCurrentAttempt((currentAttempt) => [
           ...currentAttempt,
-          String.fromCharCode(event.keyCode).toUpperCase(),
+          event.key.toUpperCase(),
         ]);
       }
       if (event.key === "Enter" && currentAttempt.length === 5) {
@@ -73,16 +72,19 @@ function Wordle() {
       if (event.key === "Backspace" && currentAttempt.length) {
         setCurrentAttempt((currentAttempt) => currentAttempt.slice(0, -1));
       }
-    };
+    },
+    [currentAttempt, gameOver]
+  );
+  useEffect(() => {
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
-  }, [currentAttempt, gameOver]);
+  }, [handleKeyPress]);
   useEffect(() => {
     if (previousAttemptsLength === 6 && !gameOver) {
       setTimeout(() => alert("Better luck next time!"), 500);
       setGameOver(true);
     }
-    if (previousAttemptsLength < 6 && gameOver) {
+    if (previousAttemptsLength <= 6 && gameOver) {
       setTimeout(() => alert("You Win"), 500);
     }
   }, [previousAttemptsLength, gameOver]);
@@ -103,7 +105,10 @@ function Wordle() {
             previousAttempts={previousAttempts}
             currentAttempt={currentAttempt}
           />
-          <Keyboard previousAttempts={previousAttempts} />
+          <Keyboard
+            previousAttempts={previousAttempts}
+            onClick={handleKeyPress}
+          />
           <Paper>Credits </Paper>
         </Box>
         <Footer />
