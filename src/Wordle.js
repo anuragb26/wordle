@@ -109,7 +109,6 @@ function Wordle() {
             previousAttempts={previousAttempts}
             onClick={handleKeyPress}
           />
-          <Paper>Credits </Paper>
         </Box>
         <Footer />
       </Container>
