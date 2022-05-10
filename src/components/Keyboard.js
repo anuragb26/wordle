@@ -21,7 +21,11 @@ const KeyboardButton = styled(Button, {
 const renderKeyBoardRow = (letters, characterColorMap, isLastRow) => {
   const keyboardButtons = [];
   if (isLastRow) {
-    keyboardButtons.push(<KeyboardButton>Enter</KeyboardButton>);
+    keyboardButtons.push(
+      <KeyboardButton backgroundColor={COLORS.KEYBOARD_GRAY}>
+        Enter
+      </KeyboardButton>
+    );
   }
   for (const letter of letters) {
     const backgroundColor = characterColorMap[letter]
@@ -35,7 +39,7 @@ const renderKeyBoardRow = (letters, characterColorMap, isLastRow) => {
   }
   if (isLastRow) {
     keyboardButtons.push(
-      <KeyboardButton>
+      <KeyboardButton backgroundColor={COLORS.KEYBOARD_GRAY}>
         <BackspaceIcon />
       </KeyboardButton>
     );
