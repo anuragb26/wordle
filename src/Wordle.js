@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
@@ -84,22 +87,28 @@ function Wordle() {
     }
   }, [previousAttemptsLength, gameOver]);
   return (
-    <Container maxWidth="sm">
-      <Box
-        sx={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <Grid
-          previousAttempts={previousAttempts}
-          currentAttempt={currentAttempt}
-        />
-        <Keyboard previousAttempts={previousAttempts} />
-      </Box>
-    </Container>
+    <>
+      <Container maxWidth="sm" sx={{ marginTop: "0.5rem" }}>
+        <Header />
+        <Box
+          sx={{
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: "4rem",
+          }}
+        >
+          <Grid
+            previousAttempts={previousAttempts}
+            currentAttempt={currentAttempt}
+          />
+          <Keyboard previousAttempts={previousAttempts} />
+          <Paper>Credits </Paper>
+        </Box>
+        <Footer />
+      </Container>
+    </>
   );
 }
 
