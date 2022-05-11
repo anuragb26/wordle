@@ -1,12 +1,21 @@
-import * as React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import useTheme from "../customHooks/useTheme";
+import { MaterialUISwitch } from "./ThemeSwitch";
 
 export default function ResponsiveAppBar() {
+  const [checked, setChecked] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const handleChange = () => {
+    setChecked(!checked);
+    toggleTheme();
+  };
   return (
     <AppBar
       position="fixed"
@@ -23,8 +32,7 @@ export default function ResponsiveAppBar() {
           disableGutters
           sx={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            flexDirection: "row",
           }}
         >
           <Box
@@ -32,11 +40,10 @@ export default function ResponsiveAppBar() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              flexGrow: "3",
             }}
           >
-            <PsychologyIcon
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-            />
+            <PsychologyIcon sx={{ display: { xs: "flex" }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
@@ -44,7 +51,7 @@ export default function ResponsiveAppBar() {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: "flex", md: "none" },
+                display: { xs: "flex" },
                 flexGrow: 1,
                 fontFamily: "monospace",
                 fontWeight: 700,
@@ -55,6 +62,19 @@ export default function ResponsiveAppBar() {
             >
               Wordle
             </Typography>
+          </Box>
+          <Box sx={{ flexGrow: "1" }}>
+            <FormControlLabel
+              control={
+                <MaterialUISwitch
+                  color="primary"
+                  checked={checked}
+                  onChange={handleChange}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label=""
+            />
           </Box>
         </Toolbar>
       </Container>

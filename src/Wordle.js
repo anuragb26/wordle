@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { ThemeProvider } from "./providers/ThemeProvider";
 import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
@@ -89,33 +89,37 @@ function Wordle() {
     }
   }, [previousAttemptsLength, gameOver]);
   return (
-    <>
-      <Container
-        maxWidth="sm"
-        sx={{ marginTop: "0.5rem", overflowX: "hidden" }}
-      >
-        <Header />
-        <Box
-          sx={{
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            marginTop: "4rem",
-          }}
+    <ThemeProvider>
+      <>
+        <Container
+          maxWidth="sm"
+          sx={{ marginTop: "0.5rem", overflowX: "hidden" }}
         >
-          <Grid
-            previousAttempts={previousAttempts}
-            currentAttempt={currentAttempt}
-          />
-          <Keyboard
-            previousAttempts={previousAttempts}
-            onClick={handleKeyPress}
-          />
-        </Box>
-        <Footer />
-      </Container>
-    </>
+          <>
+            <Header />
+            <Box
+              sx={{
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+                marginTop: "4rem",
+              }}
+            >
+              <Grid
+                previousAttempts={previousAttempts}
+                currentAttempt={currentAttempt}
+              />
+              <Keyboard
+                previousAttempts={previousAttempts}
+                onClick={handleKeyPress}
+              />
+            </Box>
+            <Footer />
+          </>
+        </Container>
+      </>
+    </ThemeProvider>
   );
 }
 
