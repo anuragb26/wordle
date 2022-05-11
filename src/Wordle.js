@@ -82,14 +82,11 @@ function Wordle() {
     return () => window.removeEventListener("keyup", handleKeyPress);
   }, [handleKeyPress]);
   useEffect(() => {
-    if (previousAttemptsLength === 6 && !gameOver) {
-      setTimeout(() => alert("Better luck next time!"), 500);
-      setGameOver(true);
+    if (previousAttemptsLength === 6) {
+      const message = gameOver ? "You Win" : "Better luck next time!";
+      setTimeout(() => alert(message), 500);
     }
-    if (previousAttemptsLength <= 6 && gameOver) {
-      setTimeout(() => alert("You Win"), 500);
-    }
-  }, [previousAttemptsLength, gameOver]);
+  }, [previousAttemptsLength]);
   return (
     <>
       <Container
