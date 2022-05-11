@@ -28,6 +28,7 @@ export const Footer = () => {
       Credits
       <Link
         variant="subtitle"
+        target="_blank"
         href="https://www.nytimes.com/games/wordle/index.html"
         sx={{ paddingLeft: "0.5rem" }}
       >
