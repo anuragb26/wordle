@@ -5,7 +5,8 @@ import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { ThemeProvider } from "./providers/ThemeProvider";
+import useTheme from "./customHooks/useTheme";
+
 import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
@@ -40,6 +41,7 @@ const getSecretLetterMap = (secret) => {
 const secretLetterMap = getSecretLetterMap(SECRET);
 
 function Wordle() {
+  const { theme } = useTheme();
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [gameOver, setGameOver] = useState(false);
@@ -89,37 +91,36 @@ function Wordle() {
     }
   }, [previousAttemptsLength, gameOver]);
   return (
-    <ThemeProvider>
-      <>
-        <Container
-          maxWidth="sm"
-          sx={{ marginTop: "0.5rem", overflowX: "hidden" }}
-        >
-          <>
-            <Header />
-            <Box
-              sx={{
-                height: "100vh",
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                marginTop: "4rem",
-              }}
-            >
-              <Grid
-                previousAttempts={previousAttempts}
-                currentAttempt={currentAttempt}
-              />
-              <Keyboard
-                previousAttempts={previousAttempts}
-                onClick={handleKeyPress}
-              />
-            </Box>
-            <Footer />
-          </>
-        </Container>
-      </>
-    </ThemeProvider>
+    <>
+      <Container
+        maxWidth="sm"
+        sx={{ marginTop: "0.5rem", overflowX: "hidden", ...theme.container }}
+        disableGutters={true}
+      >
+        <>
+          <Header />
+          <Box
+            sx={{
+              height: "100vh",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              marginTop: "4rem",
+            }}
+          >
+            <Grid
+              previousAttempts={previousAttempts}
+              currentAttempt={currentAttempt}
+            />
+            <Keyboard
+              previousAttempts={previousAttempts}
+              onClick={handleKeyPress}
+            />
+          </Box>
+          <Footer />
+        </>
+      </Container>
+    </>
   );
 }
 

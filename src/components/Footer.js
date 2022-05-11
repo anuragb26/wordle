@@ -1,7 +1,9 @@
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
+import useTheme from "../customHooks/useTheme";
 
 export const Footer = () => {
+  const { theme } = useTheme();
   return (
     <Paper
       elevation={4}
@@ -20,6 +22,7 @@ export const Footer = () => {
         fontFamily: "monospace",
         fontWeight: "700",
         letterSpacing: ".3rem",
+        ...theme.footer,
       }}
     >
       Credits

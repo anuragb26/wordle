@@ -15,7 +15,7 @@ const KeyboardButton = styled(Button, {
   backgroundColor,
   marginRight: "0.5rem",
   marginBottom: "0.5rem",
-  color: "black",
+  color: "inherit",
   fontWeight: "bolder",
   "&:hover": {
     backgroundColor,

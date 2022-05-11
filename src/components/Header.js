@@ -20,11 +20,10 @@ export default function ResponsiveAppBar() {
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "white",
-        color: "black",
         marginBottom: "1rem",
         zIndex: "100",
         height: "6vh",
+        ...theme.header,
       }}
     >
       <Container maxWidth="xl">
@@ -56,8 +55,8 @@ export default function ResponsiveAppBar() {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
                 textDecoration: "none",
+                ...theme.typography,
               }}
             >
               Wordle
