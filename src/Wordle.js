@@ -90,7 +90,10 @@ function Wordle() {
   }, [previousAttemptsLength, gameOver]);
   return (
     <>
-      <Container maxWidth="sm" sx={{ marginTop: "0.5rem" }}>
+      <Container
+        maxWidth="sm"
+        sx={{ marginTop: "0.5rem", overflowX: "hidden" }}
+      >
         <Header />
         <Box
           sx={{
