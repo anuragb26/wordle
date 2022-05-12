@@ -22,7 +22,7 @@ export default function ResponsiveAppBar() {
       sx={{
         marginBottom: "1rem",
         zIndex: "100",
-        height: "6vh",
+        height: "8vh",
         ...theme.header,
       }}
     >

@@ -11,13 +11,13 @@ export const ThemeProvider = ({ children }) => {
       header: { ...genericDark },
       footer: { ...genericDark },
       typography: { color: "white" },
-      container: { ...genericDark },
+      box: { ...genericDark },
     },
     light: {
       header: { ...genericLight },
       footer: { ...genericLight },
       typography: { color: "black" },
-      container: { ...genericLight },
+      box: { ...genericLight },
     },
   };
   const toggleTheme = () => {

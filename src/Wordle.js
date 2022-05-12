@@ -89,9 +89,14 @@ function Wordle() {
   }, [previousAttemptsLength]);
   return (
     <>
-      <Container
-        maxWidth="sm"
-        sx={{ marginTop: "0.5rem", overflowX: "hidden", ...theme.container }}
+      <Box
+        sx={{
+          marginTop: "0.5rem",
+          overflowX: "hidden",
+          width: "100%",
+          maxWidth: "100%",
+          ...theme.box,
+        }}
         disableGutters={true}
       >
         <>
@@ -102,7 +107,7 @@ function Wordle() {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
-              marginTop: "4rem",
+              marginTop: "5rem",
             }}
           >
             <Grid
@@ -116,7 +121,7 @@ function Wordle() {
           </Box>
           <Footer />
         </>
-      </Container>
+      </Box>
     </>
   );
 }
