@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
-import Container from "@mui/material/Container";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Box from "@mui/material/Box";
 import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Modal from "./components/Modal";
+import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
+import useModal from "./customHooks/useModal";
 
 import { COLORS } from "./enums";
 
@@ -42,10 +44,18 @@ const secretLetterMap = getSecretLetterMap(SECRET);
 
 function Wordle() {
   const { theme } = useTheme();
+  const [difficultyModalState, toggleDifficultyModal] = useModal();
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [gameOver, setGameOver] = useState(false);
+  const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
+  useEffect(() => {
+    if (!pageLoadModalRef.current) {
+      pageLoadModalRef.current = true;
+      setTimeout(() => toggleDifficultyModal(), 1000);
+    }
+  });
   const handleKeyPress = useCallback(
     (event) => {
       if (gameOver) {
@@ -86,7 +96,7 @@ function Wordle() {
       const message = gameOver ? "You Win" : "Better luck next time!";
       setTimeout(() => alert(message), 500);
     }
-  }, [previousAttemptsLength]);
+  }, [previousAttemptsLength, gameOver]);
   return (
     <>
       <Box
@@ -120,6 +130,9 @@ function Wordle() {
             />
           </Box>
           <Footer />
+          <Modal open={difficultyModalState}>
+            <Difficulty onSelect={toggleDifficultyModal} />
+          </Modal>
         </>
       </Box>
     </>
