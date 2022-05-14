@@ -13,7 +13,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ open, children }) {
+export default function BasicModal({ open, heading, children }) {
   return (
     <div>
       <Modal
@@ -29,7 +29,7 @@ export default function BasicModal({ open, children }) {
             component="h2"
             sx={{ textAlign: "center" }}
           >
-            Choose Difficulty
+            {heading}
           </Typography>
           <Divider />
           {children}

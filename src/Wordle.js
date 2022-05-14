@@ -45,10 +45,12 @@ const secretLetterMap = getSecretLetterMap(SECRET);
 function Wordle() {
   const { theme } = useTheme();
   const [difficultyModalState, toggleDifficultyModal] = useModal();
+  const [gameOverModal, toggleGameOverModal] = useModal();
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [timer, setTimer] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [gameOverMessage, setGameOverMessage] = useState("");
   const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
   const chooseDifficulty = React.useCallback(
@@ -99,12 +101,19 @@ function Wordle() {
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
   }, [handleKeyPress]);
+  const showGameEnd = useCallback(
+    (message) => {
+      toggleGameOverModal();
+      setGameOverMessage(message);
+    },
+    [setGameOverMessage, toggleGameOverModal]
+  );
   useEffect(() => {
     if (previousAttemptsLength === 6) {
       const message = gameOver ? "You Win" : "Better luck next time!";
-      setTimeout(() => alert(message), 500);
+      setTimeout(() => showGameEnd(message), 500);
     }
-  }, [previousAttemptsLength, gameOver]);
+  }, [previousAttemptsLength, gameOver, showGameEnd]);
   return (
     <>
       <Box
@@ -138,9 +147,10 @@ function Wordle() {
             />
           </Box>
           <Footer />
-          <Modal open={difficultyModalState}>
+          <Modal open={difficultyModalState} heading={"Choose Difficulty"}>
             <Difficulty onSelect={chooseDifficulty} />
           </Modal>
+          <Modal open={gameOverModal} heading={gameOverMessage}></Modal>
         </>
       </Box>
     </>
