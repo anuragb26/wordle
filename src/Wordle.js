@@ -47,9 +47,17 @@ function Wordle() {
   const [difficultyModalState, toggleDifficultyModal] = useModal();
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
+  const [timer, setTimer] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
+  const chooseDifficulty = React.useCallback(
+    (event) => {
+      setTimer(event.target.value);
+      toggleDifficultyModal();
+    },
+    [toggleDifficultyModal]
+  );
   useEffect(() => {
     if (!pageLoadModalRef.current) {
       pageLoadModalRef.current = true;
@@ -110,7 +118,7 @@ function Wordle() {
         disableGutters={true}
       >
         <>
-          <Header />
+          <Header timer={timer} />
           <Box
             sx={{
               height: "100vh",
@@ -131,7 +139,7 @@ function Wordle() {
           </Box>
           <Footer />
           <Modal open={difficultyModalState}>
-            <Difficulty onSelect={toggleDifficultyModal} />
+            <Difficulty onSelect={chooseDifficulty} />
           </Modal>
         </>
       </Box>

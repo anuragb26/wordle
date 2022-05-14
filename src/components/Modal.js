@@ -23,7 +23,12 @@ export default function BasicModal({ open, children }) {
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ textAlign: "center" }}
+          >
             Choose Difficulty
           </Typography>
           <Divider />

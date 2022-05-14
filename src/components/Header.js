@@ -7,9 +7,11 @@ import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import useTheme from "../customHooks/useTheme";
+import Timer from "./Timer";
+
 import { MaterialUISwitch } from "./ThemeSwitch";
 
-export default function ResponsiveAppBar() {
+export default function ResponsiveAppBar({ timer }) {
   const [checked, setChecked] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const handleChange = () => {
@@ -62,7 +64,7 @@ export default function ResponsiveAppBar() {
               Wordle
             </Typography>
           </Box>
-          <Box sx={{ flexGrow: "1" }}>
+          <Box sx={{ flexGrow: "1", display: "flex", flexDirection: "row" }}>
             <FormControlLabel
               control={
                 <MaterialUISwitch
@@ -74,6 +76,7 @@ export default function ResponsiveAppBar() {
               }
               label=""
             />
+            {timer !== 0 && <Timer timer={timer} />}
           </Box>
         </Toolbar>
       </Container>

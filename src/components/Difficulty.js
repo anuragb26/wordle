@@ -8,23 +8,25 @@ const Difficulty = ({ onSelect }) => {
     <FormControl>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="easy"
         name="radio-buttons-group"
       >
         <FormControlLabel
-          value="easy"
+          value="1"
           control={<Radio />}
           label="Easy (15 mins)"
+          onChange={onSelect}
         />
         <FormControlLabel
-          value="moderate"
+          value="2"
           control={<Radio />}
           label="Moderate (10 mins)"
+          onChange={onSelect}
         />
         <FormControlLabel
-          value="hard"
+          value="3"
           control={<Radio />}
           label="Hard (5 mins)"
+          onChange={onSelect}
         />
       </RadioGroup>
     </FormControl>
