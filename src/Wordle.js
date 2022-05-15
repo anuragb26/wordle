@@ -60,12 +60,13 @@ function Wordle() {
     },
     [toggleDifficultyModal]
   );
-  useEffect(() => {
-    if (!pageLoadModalRef.current) {
-      pageLoadModalRef.current = true;
-      setTimeout(() => toggleDifficultyModal(), 1000);
-    }
-  });
+  const showGameEnd = useCallback(
+    (message) => {
+      toggleGameOverModal();
+      setGameOverMessage(message);
+    },
+    [setGameOverMessage, toggleGameOverModal]
+  );
   const handleKeyPress = useCallback(
     (event) => {
       if (gameOver) {
@@ -98,16 +99,16 @@ function Wordle() {
     [currentAttempt, gameOver]
   );
   useEffect(() => {
+    if (!pageLoadModalRef.current) {
+      pageLoadModalRef.current = true;
+      setTimeout(() => toggleDifficultyModal(), 1000);
+    }
+  });
+  useEffect(() => {
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
   }, [handleKeyPress]);
-  const showGameEnd = useCallback(
-    (message) => {
-      toggleGameOverModal();
-      setGameOverMessage(message);
-    },
-    [setGameOverMessage, toggleGameOverModal]
-  );
+
   useEffect(() => {
     if (previousAttemptsLength === 6) {
       const message = gameOver ? "You Win" : "Better luck next time!";
@@ -127,7 +128,13 @@ function Wordle() {
         disableGutters={true}
       >
         <>
-          <Header timer={timer} />
+          <Header
+            timer={timer}
+            onTimerEnd={() => {
+              setGameOver(true);
+              setTimeout(() => showGameEnd("Time up!"), 500);
+            }}
+          />
           <Box
             sx={{
               height: "100vh",

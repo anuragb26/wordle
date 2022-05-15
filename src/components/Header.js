@@ -8,10 +8,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import useTheme from "../customHooks/useTheme";
 import Timer from "./Timer";
-
 import { MaterialUISwitch } from "./ThemeSwitch";
 
-export default function ResponsiveAppBar({ timer }) {
+export default function ResponsiveAppBar({ timer, onTimerEnd }) {
   const [checked, setChecked] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const handleChange = () => {
@@ -76,7 +75,7 @@ export default function ResponsiveAppBar({ timer }) {
               }
               label=""
             />
-            {timer !== 0 && <Timer timer={timer} />}
+            {timer !== 0 && <Timer timer={timer} onTimerEnd={onTimerEnd} />}
           </Box>
         </Toolbar>
       </Container>

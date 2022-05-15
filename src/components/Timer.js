@@ -1,10 +1,17 @@
 import { Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import useTimer from "../customHooks/useTimer";
+import usePrevious from "../customHooks/usePrevious";
 
-const Timer = ({ timer }) => {
+const Timer = ({ timer, onTimerEnd }) => {
   const startTimerRef = useRef(null);
   const [isRunning, start, stop, seconds] = useTimer(timer * 60);
+  const previousIsRunning = usePrevious(isRunning);
+  useEffect(() => {
+    if (isRunning === false && previousIsRunning === true) {
+      onTimerEnd();
+    }
+  }, [isRunning]);
   useEffect(() => {
     if (!startTimerRef.current) {
       start();
