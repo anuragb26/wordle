@@ -8,7 +8,6 @@ import Modal from "./components/Modal";
 import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
-import usePrevious from "./customHooks/usePrevious";
 
 import { COLORS } from "./enums";
 

@@ -5,13 +5,13 @@ import usePrevious from "../customHooks/usePrevious";
 
 const Timer = ({ timer, onTimerEnd }) => {
   const startTimerRef = useRef(null);
-  const [isRunning, start, stop, seconds] = useTimer(timer * 60);
+  const [isRunning, seconds, start] = useTimer(timer * 60);
   const previousIsRunning = usePrevious(isRunning);
   useEffect(() => {
     if (isRunning === false && previousIsRunning === true) {
       onTimerEnd();
     }
-  }, [isRunning]);
+  }, [isRunning, onTimerEnd, previousIsRunning]);
   useEffect(() => {
     if (!startTimerRef.current) {
       start();

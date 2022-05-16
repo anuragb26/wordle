@@ -21,7 +21,7 @@ const useTimer = (time) => {
       stop();
     }
   }, [seconds, stop]);
-  return [isRunning, start, stop, seconds];
+  return [isRunning, seconds, start, stop];
 };
 
 export default useTimer;
