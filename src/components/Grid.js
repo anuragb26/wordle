@@ -1,5 +1,16 @@
 import Box from "@mui/material/Box";
 
+const cellStyle = {
+  width: "3.5rem",
+  height: "3.5rem",
+  border: "1px solid grey",
+  marginBottom: "0.25rem",
+  marginLeft: "0.25rem",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
 function Grid({ previousAttempts, currentAttempt }) {
   let remainingAttempts =
     6 - previousAttempts.length - (currentAttempt.length ? 1 : 0);
@@ -20,14 +31,7 @@ function Grid({ previousAttempts, currentAttempt }) {
               <Box
                 key={`${attemptIndex}${characterIndex}`}
                 sx={{
-                  width: "4rem",
-                  height: "4rem",
-                  border: "1px solid grey",
-                  marginBottom: "0.5rem",
-                  marginLeft: "0.5rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  ...cellStyle,
                   backgroundColor: bgColor[characterIndex],
                 }}
               >
@@ -53,33 +57,19 @@ function Grid({ previousAttempts, currentAttempt }) {
             <Box
               key={index}
               sx={{
-                width: "4rem",
-                height: "4rem",
-                border: "1px solid grey",
-                marginBottom: "0.5rem",
-                marginLeft: "0.5rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                ...cellStyle,
               }}
             >
               {character}
             </Box>
           ))}
-          {Array(5 - currentAttempt.length)
+          {Array(6 - currentAttempt.length)
             .fill()
             .map((_, index) => (
               <Box
                 key={index}
                 sx={{
-                  width: "4rem",
-                  height: "4rem",
-                  border: "1px solid grey",
-                  marginBottom: "0.5rem",
-                  marginLeft: "0.5rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  ...cellStyle,
                 }}
               ></Box>
             ))}
@@ -99,20 +89,13 @@ function Grid({ previousAttempts, currentAttempt }) {
           alignItems: "center",
         }}
       >
-        {Array(5)
+        {Array(6)
           .fill()
           .map((_, cellIndex) => (
             <Box
               key={cellIndex}
               sx={{
-                width: "4rem",
-                height: "4rem",
-                border: "1px solid grey",
-                marginBottom: "0.5rem",
-                marginLeft: "0.5rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                ...cellStyle,
               }}
             ></Box>
           ))}

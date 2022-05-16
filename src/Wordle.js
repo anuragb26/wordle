@@ -8,11 +8,12 @@ import Modal from "./components/Modal";
 import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
+import usePrevious from "./customHooks/usePrevious";
 
 import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
-const SECRET = "TRAIN";
+const SECRET = "WORDLE";
 
 const getBgColor = (attempt, secret, secretLetterMap) => {
   const map = { ...secretLetterMap };
@@ -53,6 +54,7 @@ function Wordle() {
   const [gameOverMessage, setGameOverMessage] = useState("");
   const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
+
   const chooseDifficulty = React.useCallback(
     (event) => {
       setTimer(event.target.value);
@@ -74,14 +76,14 @@ function Wordle() {
       }
       if (
         ALPHABETS.indexOf(event.key.toUpperCase()) > -1 &&
-        currentAttempt.length < 5
+        currentAttempt.length < 6
       ) {
         setCurrentAttempt((currentAttempt) => [
           ...currentAttempt,
           event.key.toUpperCase(),
         ]);
       }
-      if (event.key === "Enter" && currentAttempt.length === 5) {
+      if (event.key === "Enter" && currentAttempt.length === 6) {
         setCurrentAttempt([]);
         setPreviousAttempts((previousAttempts) => [
           ...previousAttempts,
@@ -90,7 +92,9 @@ function Wordle() {
             bgColor: getBgColor(currentAttempt, SECRET, secretLetterMap),
           },
         ]);
-        setGameOver(currentAttempt.join("") === SECRET);
+        setGameOver(
+          currentAttempt.join("").toUpperCase() === SECRET.toUpperCase()
+        );
       }
       if (event.key === "Backspace" && currentAttempt.length) {
         setCurrentAttempt((currentAttempt) => currentAttempt.slice(0, -1));
@@ -110,8 +114,13 @@ function Wordle() {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    if (previousAttemptsLength === 6) {
-      const message = gameOver ? "You Win" : "Better luck next time!";
+    let message;
+    if (gameOver === true) {
+      message = "You win";
+    } else if (previousAttemptsLength === 6 && !gameOver) {
+      message = "Better Luck Next time";
+    }
+    if (message) {
       setTimeout(() => showGameEnd(message), 500);
     }
   }, [previousAttemptsLength, gameOver, showGameEnd]);
