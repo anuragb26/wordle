@@ -11,21 +11,21 @@ const Difficulty = ({ onSelect }) => {
         name="radio-buttons-group"
       >
         <FormControlLabel
-          value="1"
+          value="30"
           control={<Radio />}
-          label="Easy (15 mins)"
+          label="Easy (30 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="2"
+          value="20"
           control={<Radio />}
-          label="Moderate (10 mins)"
+          label="Moderate (20 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="3"
+          value="10"
           control={<Radio />}
-          label="Hard (5 mins)"
+          label="Difficult (10 mins)"
           onChange={onSelect}
         />
       </RadioGroup>
