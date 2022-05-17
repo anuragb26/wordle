@@ -5,12 +5,13 @@ import Keyboard from "./components/Keyboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
+import { Button } from "@mui/material";
 import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
 import useRandomWord from "./customHooks/useRandomWord";
 
-import { COLORS } from "./enums";
+import { COLORS, MESSAGES } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
 
@@ -49,7 +50,6 @@ function Wordle() {
   const [currentAttempt, setCurrentAttempt] = useState([]);
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [timer, setTimer] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
   const [gameOverMessage, setGameOverMessage] = useState("");
   const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
@@ -70,7 +70,7 @@ function Wordle() {
   );
   const handleKeyPress = useCallback(
     (event) => {
-      if (gameOver) {
+      if ([MESSAGES.WIN, MESSAGES.TIME_UP].includes(gameOverMessage)) {
         return;
       }
       const secretLetterMap = SECRET ? getSecretLetterMap(SECRET) : {};
@@ -92,17 +92,25 @@ function Wordle() {
             bgColor: getBgColor(currentAttempt, SECRET, secretLetterMap),
           },
         ]);
-        setGameOver(
-          currentAttempt.join("").toUpperCase() === SECRET.toUpperCase()
-        );
+        if (currentAttempt.join("").toUpperCase() === SECRET.toUpperCase()) {
+          setTimeout(() => showGameEnd(MESSAGES.WIN), 500);
+        }
       }
       if (event.key === "Backspace" && currentAttempt.length) {
         setCurrentAttempt((currentAttempt) => currentAttempt.slice(0, -1));
       }
     },
-    [currentAttempt, gameOver, SECRET]
+    [currentAttempt, gameOverMessage, showGameEnd, SECRET]
   );
-
+  const playAgain = () => {
+    toggleGameOverModal();
+    setPreviousAttempts([]);
+    setCurrentAttempt([]);
+    setSecret();
+    setTimer(0);
+    setGameOverMessage("");
+    pageLoadModalRef.current = false;
+  };
   useEffect(() => {
     if (!pageLoadModalRef.current) {
       pageLoadModalRef.current = true;
@@ -115,16 +123,10 @@ function Wordle() {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    let message;
-    if (gameOver === true) {
-      message = "You win";
-    } else if (previousAttemptsLength === 6 && !gameOver) {
-      message = "Better Luck Next time";
+    if (previousAttemptsLength === 6 && !gameOverMessage) {
+      setTimeout(() => showGameEnd(MESSAGES.LOST), 500);
     }
-    if (message) {
-      setTimeout(() => showGameEnd(message), 500);
-    }
-  }, [previousAttemptsLength, gameOver, showGameEnd]);
+  }, [previousAttemptsLength, gameOverMessage, showGameEnd]);
   return (
     <>
       {SECRET && (
@@ -142,7 +144,7 @@ function Wordle() {
             <Header
               timer={timer}
               onTimerEnd={() => {
-                setGameOver(true);
+                setTimeout(() => showGameEnd(MESSAGES.TIME_UP), 500);
               }}
             />
             <Box
@@ -164,10 +166,45 @@ function Wordle() {
               />
             </Box>
             <Footer />
-            <Modal open={difficultyModalState} heading={"Choose Difficulty"}>
+            <Modal
+              open={difficultyModalState}
+              heading={MESSAGES.CHOOSE_DIFFICULTY}
+            >
               <Difficulty onSelect={chooseDifficulty} />
             </Modal>
-            <Modal open={gameOverModal} heading={gameOverMessage}></Modal>
+            <Modal open={gameOverModal} heading={gameOverMessage}>
+              {gameOverMessage && (
+                <div>
+                  {[MESSAGES.TIME_UP, MESSAGES.LOST].includes(
+                    gameOverMessage
+                  ) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      Secret Word:
+                      <b>
+                        <i>{SECRET}</i>
+                      </b>
+                    </Box>
+                  )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button onClick={playAgain}>
+                      <strong>PLAY AGAIN!</strong>
+                    </Button>
+                  </Box>
+                </div>
+              )}
+            </Modal>
           </>
         </Box>
       )}
