@@ -8,11 +8,11 @@ import Modal from "./components/Modal";
 import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
+import useRandomWord from "./customHooks/useRandomWord";
 
 import { COLORS } from "./enums";
 
 const ALPHABETS = "ABCDEFGHIJKLMMNOPQRSTUVWXYZ";
-const SECRET = "WORDLE";
 
 const getBgColor = (attempt, secret, secretLetterMap) => {
   const map = { ...secretLetterMap };
@@ -40,10 +40,10 @@ const getSecretLetterMap = (secret) => {
     return map;
   }, {});
 };
-const secretLetterMap = getSecretLetterMap(SECRET);
 
 function Wordle() {
   const { theme } = useTheme();
+  const [SECRET, setSecret] = useRandomWord();
   const [difficultyModalState, toggleDifficultyModal] = useModal();
   const [gameOverModal, toggleGameOverModal] = useModal();
   const [currentAttempt, setCurrentAttempt] = useState([]);
@@ -73,6 +73,7 @@ function Wordle() {
       if (gameOver) {
         return;
       }
+      const secretLetterMap = SECRET ? getSecretLetterMap(SECRET) : {};
       if (
         ALPHABETS.indexOf(event.key.toUpperCase()) > -1 &&
         currentAttempt.length < 6
@@ -99,8 +100,9 @@ function Wordle() {
         setCurrentAttempt((currentAttempt) => currentAttempt.slice(0, -1));
       }
     },
-    [currentAttempt, gameOver]
+    [currentAttempt, gameOver, SECRET]
   );
+
   useEffect(() => {
     if (!pageLoadModalRef.current) {
       pageLoadModalRef.current = true;
@@ -125,49 +127,50 @@ function Wordle() {
   }, [previousAttemptsLength, gameOver, showGameEnd]);
   return (
     <>
-      <Box
-        sx={{
-          marginTop: "0.5rem",
-          overflowX: "hidden",
-          width: "100%",
-          maxWidth: "100%",
-          ...theme.box,
-        }}
-        disableGutters={true}
-      >
-        <>
-          <Header
-            timer={timer}
-            onTimerEnd={() => {
-              setGameOver(true);
-              setTimeout(() => showGameEnd("Time up!"), 500);
-            }}
-          />
-          <Box
-            sx={{
-              height: "100vh",
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
-              marginTop: "5rem",
-            }}
-          >
-            <Grid
-              previousAttempts={previousAttempts}
-              currentAttempt={currentAttempt}
+      {SECRET && (
+        <Box
+          sx={{
+            marginTop: "0.5rem",
+            overflowX: "hidden",
+            width: "100%",
+            maxWidth: "100%",
+            ...theme.box,
+          }}
+          disableGutters={true}
+        >
+          <>
+            <Header
+              timer={timer}
+              onTimerEnd={() => {
+                setGameOver(true);
+              }}
             />
-            <Keyboard
-              previousAttempts={previousAttempts}
-              onClick={handleKeyPress}
-            />
-          </Box>
-          <Footer />
-          <Modal open={difficultyModalState} heading={"Choose Difficulty"}>
-            <Difficulty onSelect={chooseDifficulty} />
-          </Modal>
-          <Modal open={gameOverModal} heading={gameOverMessage}></Modal>
-        </>
-      </Box>
+            <Box
+              sx={{
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+                marginTop: "5rem",
+              }}
+            >
+              <Grid
+                previousAttempts={previousAttempts}
+                currentAttempt={currentAttempt}
+              />
+              <Keyboard
+                previousAttempts={previousAttempts}
+                onClick={handleKeyPress}
+              />
+            </Box>
+            <Footer />
+            <Modal open={difficultyModalState} heading={"Choose Difficulty"}>
+              <Difficulty onSelect={chooseDifficulty} />
+            </Modal>
+            <Modal open={gameOverModal} heading={gameOverMessage}></Modal>
+          </>
+        </Box>
+      )}
     </>
   );
 }
