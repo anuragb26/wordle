@@ -53,6 +53,7 @@ function Wordle() {
   const [gameOverMessage, setGameOverMessage] = useState("");
   const pageLoadModalRef = useRef(false);
   const previousAttemptsLength = previousAttempts.length;
+  const timeOutRef = useRef(null);
 
   const chooseDifficulty = React.useCallback(
     (event) => {
@@ -65,6 +66,7 @@ function Wordle() {
     (message) => {
       toggleGameOverModal();
       setGameOverMessage(message);
+      timeOutRef.current = null;
     },
     [setGameOverMessage, toggleGameOverModal]
   );
@@ -93,7 +95,7 @@ function Wordle() {
           },
         ]);
         if (currentAttempt.join("").toUpperCase() === SECRET.toUpperCase()) {
-          setTimeout(() => showGameEnd(MESSAGES.WIN), 500);
+          timeOutRef.current = setTimeout(() => showGameEnd(MESSAGES.WIN), 500);
         }
       }
       if (event.key === "Backspace" && currentAttempt.length) {
@@ -110,6 +112,7 @@ function Wordle() {
     setTimer(0);
     setGameOverMessage("");
     pageLoadModalRef.current = false;
+    timeOutRef.current = null;
   };
   useEffect(() => {
     if (!pageLoadModalRef.current) {
@@ -123,10 +126,11 @@ function Wordle() {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    if (previousAttemptsLength === 6 && !gameOverMessage) {
+    if (previousAttemptsLength === 6 && !timeOutRef.current) {
       setTimeout(() => showGameEnd(MESSAGES.LOST), 500);
     }
-  }, [previousAttemptsLength, gameOverMessage, showGameEnd]);
+  }, [previousAttemptsLength, showGameEnd]);
+
   return (
     <>
       {SECRET && (
@@ -144,7 +148,10 @@ function Wordle() {
             <Header
               timer={timer}
               onTimerEnd={() => {
-                setTimeout(() => showGameEnd(MESSAGES.TIME_UP), 500);
+                timeOutRef.current = setTimeout(
+                  () => showGameEnd(MESSAGES.TIME_UP),
+                  500
+                );
               }}
             />
             <Box
