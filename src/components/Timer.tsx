@@ -1,10 +1,14 @@
 import { Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, ReactElement } from "react";
 import useTimer from "../customHooks/useTimer";
 import usePrevious from "../customHooks/usePrevious";
 
-const Timer = ({ timer, onTimerEnd }) => {
-  const startTimerRef = useRef(null);
+type TimerProps = {
+  timer: number;
+  onTimerEnd: () => void;
+};
+const Timer = ({ timer, onTimerEnd }: TimerProps): ReactElement => {
+  const startTimerRef = useRef<null | Boolean>(null);
   const [isRunning, seconds, start] = useTimer(timer * 60);
   const previousIsRunning = usePrevious(isRunning);
   useEffect(() => {
@@ -18,8 +22,8 @@ const Timer = ({ timer, onTimerEnd }) => {
       startTimerRef.current = true;
     }
   }, [start]);
-  let minutes = Math.floor(seconds / 60);
-  let remainingSeconds = seconds % 60;
+  let minutes: string | number = Math.floor(seconds / 60);
+  let remainingSeconds: string | number = seconds % 60;
   if (minutes < 10) {
     minutes = `0${minutes}`;
   }

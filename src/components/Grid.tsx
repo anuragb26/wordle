@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { ReactElement } from "react";
 
 const cellStyle = {
   width: "3.5rem",
@@ -10,8 +11,16 @@ const cellStyle = {
   justifyContent: "center",
   alignItems: "center",
 };
+export type previousAttemptsProps = {
+  attempt: string;
+  bgColor: string[];
+};
+type GridProps = {
+  previousAttempts: Array<previousAttemptsProps>;
+  currentAttempt: Array<string>;
+};
 
-function Grid({ previousAttempts, currentAttempt }) {
+function Grid({ previousAttempts, currentAttempt }: GridProps): ReactElement {
   let remainingAttempts =
     6 - previousAttempts.length - (currentAttempt.length ? 1 : 0);
   const previousAttemptRows = previousAttempts.length
@@ -19,12 +28,12 @@ function Grid({ previousAttempts, currentAttempt }) {
         return (
           <Box
             key={`${attempt}${attemptIndex}`}
-            direction={"row"}
-            spacing={1}
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              flexDirection: "row",
+              spacing: "1",
             }}
           >
             {attempt.split("").map((character, characterIndex) => (
@@ -45,12 +54,12 @@ function Grid({ previousAttempts, currentAttempt }) {
   const currentAttemptRow = currentAttempt.length
     ? [
         <Box
-          direction={"row"}
-          spacing={1}
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "row",
+            spacing: "1",
           }}
         >
           {currentAttempt.map((character, index) => (
@@ -64,7 +73,7 @@ function Grid({ previousAttempts, currentAttempt }) {
             </Box>
           ))}
           {Array(6 - currentAttempt.length)
-            .fill()
+            .fill("")
             .map((_, index) => (
               <Box
                 key={index}
@@ -77,20 +86,20 @@ function Grid({ previousAttempts, currentAttempt }) {
       ]
     : [];
   const remainingAttemptRows = Array(remainingAttempts)
-    .fill()
+    .fill("")
     .map((_, index) => (
       <Box
         key={index}
-        direction={"row"}
-        spacing={1}
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "row",
+          spacing: "1",
         }}
       >
         {Array(6)
-          .fill()
+          .fill("")
           .map((_, cellIndex) => (
             <Box
               key={cellIndex}
@@ -101,12 +110,12 @@ function Grid({ previousAttempts, currentAttempt }) {
           ))}
       </Box>
     ));
-  const attemptRows = [
+  const attemptRows: ReactElement[] = [
     ...previousAttemptRows,
     ...currentAttemptRow,
     ...remainingAttemptRows,
   ];
-  return attemptRows;
+  return <>{attemptRows}</>;
 }
 
 export default Grid;

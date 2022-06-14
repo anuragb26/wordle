@@ -4,7 +4,8 @@ import "./index.css";
 import Wordle from "./Wordle";
 import { ThemeProvider } from "./providers/ThemeProvider";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootHtml = document.getElementById("root") as HTMLElement;
+const root = ReactDOM.createRoot(rootHtml);
 
 root.render(
   <React.StrictMode>

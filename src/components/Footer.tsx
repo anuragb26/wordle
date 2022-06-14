@@ -1,8 +1,9 @@
+import { ReactElement } from "react";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import useTheme from "../customHooks/useTheme";
 
-export const Footer = () => {
+function Footer(): ReactElement {
   const { theme } = useTheme();
   return (
     <Paper
@@ -27,7 +28,7 @@ export const Footer = () => {
     >
       Credits
       <Link
-        variant="subtitle"
+        variant="subtitle1"
         target="_blank"
         href="https://www.nytimes.com/games/wordle/index.html"
         sx={{ paddingLeft: "0.5rem" }}
@@ -36,6 +37,6 @@ export const Footer = () => {
       </Link>
     </Paper>
   );
-};
+}
 
 export default Footer;

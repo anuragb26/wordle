@@ -1,9 +1,14 @@
+import React, { ReactElement, SyntheticEvent } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
-const Difficulty = ({ onSelect }) => {
+type DifficultyProps = {
+  onSelect: (event: SyntheticEvent) => void;
+};
+
+const Difficulty = ({ onSelect }: DifficultyProps): ReactElement => {
   return (
     <FormControl>
       <RadioGroup
@@ -11,19 +16,19 @@ const Difficulty = ({ onSelect }) => {
         name="radio-buttons-group"
       >
         <FormControlLabel
-          value="30"
+          value="1"
           control={<Radio />}
           label="Easy (30 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="20"
+          value="2"
           control={<Radio />}
           label="Moderate (20 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="10"
+          value="3"
           control={<Radio />}
           label="Difficult (10 mins)"
           onChange={onSelect}

@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const useTimer = (time) => {
-  const [isRunning, setIsRunning] = useState(false);
-  const [seconds, setSeconds] = useState(time);
-  const intervalRef = useRef();
+type TimerType = [Boolean, number, () => void, () => void];
+
+const useTimer = (time: number): TimerType => {
+  const [isRunning, setIsRunning] = useState<Boolean>(false);
+  const [seconds, setSeconds] = useState<number>(time);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
   const start = useCallback(() => {
     intervalRef.current = setInterval(() => {
       setSeconds((seconds) => seconds - 1);

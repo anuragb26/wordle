@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 
+type RandomWordReturnProps = [word: string, setRandomWord: () => void];
+
 const WORDLIST = [
   "betray",
   "burial",
@@ -108,11 +110,11 @@ const WORDLIST = [
   "jejune",
   "jaunty",
 ];
-const findWord = () =>
+const findWord = (): string =>
   WORDLIST[Math.round(Math.random() * WORDLIST.length)].toUpperCase();
 
-const useRandomWord = () => {
-  const [word, setWord] = useState(findWord());
+const useRandomWord = (): RandomWordReturnProps => {
+  const [word, setWord] = useState<string>(findWord());
   const setRandomWord = useCallback(() => {
     setWord(findWord());
   }, [setWord]);

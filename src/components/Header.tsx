@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,13 +10,23 @@ import useTheme from "../customHooks/useTheme";
 import Timer from "./Timer";
 import { MaterialUISwitch } from "./ThemeSwitch";
 
-export default function ResponsiveAppBar({ timer, onTimerEnd }) {
-  const [checked, setChecked] = useState(false);
+type ResponsiveAppBarTypes = {
+  timer: number;
+  onTimerEnd: () => void;
+};
+
+export default function ResponsiveAppBar({
+  timer,
+  onTimerEnd,
+}: ResponsiveAppBarTypes): ReactElement {
+  const [checked, setChecked] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
   const handleChange = () => {
     setChecked(!checked);
     toggleTheme();
   };
+  const { header = {}, typography = {} } = theme;
+
   return (
     <AppBar
       position="fixed"
@@ -24,7 +34,7 @@ export default function ResponsiveAppBar({ timer, onTimerEnd }) {
         marginBottom: "1rem",
         zIndex: "100",
         height: "8vh",
-        ...theme.header,
+        ...header,
       }}
     >
       <Container maxWidth="xl">
@@ -57,7 +67,7 @@ export default function ResponsiveAppBar({ timer, onTimerEnd }) {
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 textDecoration: "none",
-                ...theme.typography,
+                ...typography,
               }}
             >
               Wordle

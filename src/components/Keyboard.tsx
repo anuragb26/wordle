@@ -1,14 +1,23 @@
-import React, { useMemo } from "react";
+import React, { useMemo, ReactElement } from "react";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-
 import BackspaceIcon from "@mui/icons-material/Backspace";
+import { previousAttemptsProps } from "./Grid";
 import { COLORS } from "../enums";
+
+type KeyboardProps = {
+  previousAttempts: Array<previousAttemptsProps>;
+  onClick: (event: Partial<KeyboardEvent>) => void;
+};
+
+interface styledButtonProps {
+  backgroundColor: string;
+}
 
 const KeyboardButton = styled(Button, {
   shouldForwardProp: (props) => props !== "backgroundColor",
-})(({ theme, backgroundColor }) => ({
+})<styledButtonProps>(({ theme, backgroundColor }) => ({
   height: "3rem",
   minWidth: "1.5rem",
   textAlign: "center",
@@ -25,7 +34,12 @@ const KeyboardButton = styled(Button, {
   },
 }));
 
-const renderKeyBoardRow = (letters, characterColorMap, onClick, isLastRow) => {
+const renderKeyBoardRow = (
+  letters: string,
+  characterColorMap: { [key: string]: string },
+  onClick: (e: Partial<KeyboardEvent>) => void,
+  isLastRow: Boolean
+) => {
   const keyboardButtons = [];
   if (isLastRow) {
     keyboardButtons.push(
@@ -76,11 +90,16 @@ const COLOR_HIERARCHY = {
   [COLORS.GREEN]: 4,
 };
 
-const getCharacterMap = (previousAttempts) =>
-  previousAttempts.reduce((map, { attempt, bgColor }) => {
+type COLORTYPES = keyof typeof COLOR_HIERARCHY;
+type CharacterMapObject = { [key: string]: COLORTYPES };
+
+const getCharacterMap = (
+  previousAttempts: KeyboardProps["previousAttempts"]
+): CharacterMapObject =>
+  previousAttempts.reduce((map: CharacterMapObject, { attempt, bgColor }) => {
     attempt.split("").forEach((character, index) => {
       const existingColor = map[character] || COLORS.KEYBOARD_GRAY;
-      const currentColor = bgColor[index];
+      const currentColor = bgColor[index] as COLORTYPES;
       const existingColorNumber = COLOR_HIERARCHY[existingColor];
       const currentColorNumber = COLOR_HIERARCHY[currentColor];
       map[character] =
@@ -88,7 +107,8 @@ const getCharacterMap = (previousAttempts) =>
     });
     return map;
   }, {});
-function Keyboard({ previousAttempts, onClick }) {
+
+function Keyboard({ previousAttempts, onClick }: KeyboardProps): ReactElement {
   const characterColorMap = useMemo(
     () => getCharacterMap(previousAttempts),
     [previousAttempts]

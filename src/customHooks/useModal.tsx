@@ -1,7 +1,9 @@
 import { useState, useCallback } from "react";
 
-const useModal = () => {
-  const [modalState, setModalState] = useState(false);
+type useModalReturnProps = [modalState: boolean, toggleModal: () => void];
+
+const useModal = (): useModalReturnProps => {
+  const [modalState, setModalState] = useState<boolean>(false);
   const toggleModal = useCallback(
     () => setModalState((modalState) => !modalState),
     [setModalState]

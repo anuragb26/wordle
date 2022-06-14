@@ -1,22 +1,28 @@
-import React, { useState } from "react";
-import { ThemeContext } from "../context/ThemeContext";
+import React, { useState, ReactNode, ReactElement } from "react";
+import { ThemeContext, themeState, ThemeType } from "../context/ThemeContext";
 import { COLORS } from "../enums/colors";
 
-export const ThemeProvider = ({ children }) => {
-  const [themeColor, setThemeColor] = useState("light");
+type ThemeProviderProps = {
+  children: ReactNode;
+};
+
+export const ThemeProvider = ({
+  children,
+}: ThemeProviderProps): ReactElement => {
+  const [themeColor, setThemeColor] = useState<themeState>("light");
   const genericDark = { backgroundColor: COLORS.BLACK, color: COLORS.WHITE };
-  const genericLight = { backgroundColor: "white", color: "black" };
-  const theme = {
+  const genericLight = { backgroundColor: COLORS.WHITE, color: COLORS.BLACK };
+  const theme: ThemeType = {
     dark: {
       header: { ...genericDark },
       footer: { ...genericDark },
-      typography: { color: "white" },
+      typography: { color: COLORS.WHITE },
       box: { ...genericDark },
     },
     light: {
       header: { ...genericLight },
       footer: { ...genericLight },
-      typography: { color: "black" },
+      typography: { color: COLORS.BLACK },
       box: { ...genericLight },
     },
   };
