@@ -16,19 +16,19 @@ const Difficulty = ({ onSelect }: DifficultyProps): ReactElement => {
         name="radio-buttons-group"
       >
         <FormControlLabel
-          value="1"
+          value="30"
           control={<Radio />}
           label="Easy (30 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="2"
+          value="20"
           control={<Radio />}
           label="Moderate (20 mins)"
           onChange={onSelect}
         />
         <FormControlLabel
-          value="3"
+          value="10"
           control={<Radio />}
           label="Difficult (10 mins)"
           onChange={onSelect}
