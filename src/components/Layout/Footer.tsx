@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import useTheme from "../customHooks/useTheme";
+import useTheme from "../../customHooks/useTheme";
 
 function Footer(): ReactElement {
   const { theme } = useTheme();

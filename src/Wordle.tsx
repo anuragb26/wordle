@@ -1,6 +1,5 @@
 import React, {
   useEffect,
-  useState,
   useCallback,
   useRef,
   useReducer,
@@ -9,14 +8,13 @@ import React, {
 import Box from "@mui/material/Box";
 import Grid from "./components/Grid";
 import Keyboard from "./components/Keyboard";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import Modal from "./components/Modal";
 import { Button } from "@mui/material";
 import Difficulty from "./components/Difficulty";
 import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
 import useRandomWord from "./customHooks/useRandomWord";
+import useCounter from "./customHooks/useCounter";
 import { gameStateReducer, initialGameState } from "./reducers";
 import { gameStateActions } from "./actions";
 import { COLORS, MESSAGES } from "./enums";
@@ -60,6 +58,7 @@ const getSecretLetterMap = (secret: string): SecretLetterMap => {
 
 function Wordle() {
   const { theme } = useTheme();
+  const { setTimer, timeup, setTimeup } = useCounter();
   const [
     { currentAttempt, previousAttempts, gameOverMessage } = initialGameState,
     dispatch,
@@ -67,34 +66,25 @@ function Wordle() {
   const [SECRET, setSecret] = useRandomWord();
   const [difficultyModalState, toggleDifficultyModal] = useModal();
   const [gameOverModal, toggleGameOverModal] = useModal();
-  const [timer, setTimer] = useState<number>(0);
   const pageLoadModalRef = useRef<boolean>(false);
   const previousAttemptsLength = previousAttempts.length;
-  const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chooseDifficulty = React.useCallback(
     (event: SyntheticEvent) => {
       setTimer(parseInt((event.target as HTMLInputElement).value));
       toggleDifficultyModal();
     },
-    [toggleDifficultyModal]
+    [toggleDifficultyModal, setTimer]
   );
-  const showGameEnd = useCallback(
-    (message: MESSAGES) => {
-      toggleGameOverModal();
-      dispatch({
-        type: gameStateActions.SET_GAME_OVER_MESSAGE,
-        payload: message,
-      });
-      timeOutRef.current = null;
-    },
-    [toggleGameOverModal, dispatch]
-  );
+  const showGameEnd = useCallback(() => {
+    toggleGameOverModal();
+    setTimer(0);
+    setTimeup(false);
+  }, [toggleGameOverModal, setTimer, setTimeup]);
   const handleKeyPress = useCallback(
     (event: Partial<KeyboardEvent>) => {
       if ([MESSAGES.WIN, MESSAGES.TIME_UP].includes(gameOverMessage)) {
         return;
       }
-
       const secretLetterMap = SECRET ? getSecretLetterMap(SECRET) : {};
       if (
         event.key &&
@@ -116,7 +106,11 @@ function Wordle() {
           },
         });
         if (currentAttempt.join("").toUpperCase() === SECRET.toUpperCase()) {
-          timeOutRef.current = setTimeout(() => showGameEnd(MESSAGES.WIN), 500);
+          dispatch({
+            type: gameStateActions.SET_GAME_OVER_MESSAGE,
+            payload: MESSAGES.WIN,
+          });
+          setTimeout(() => showGameEnd(), 500);
         }
       }
       if (event.key === "Backspace" && currentAttempt.length) {
@@ -131,7 +125,6 @@ function Wordle() {
     setSecret();
     setTimer(0);
     pageLoadModalRef.current = false;
-    timeOutRef.current = null;
   };
   useEffect(() => {
     if (!pageLoadModalRef.current) {
@@ -143,12 +136,24 @@ function Wordle() {
     window.addEventListener("keyup", handleKeyPress);
     return () => window.removeEventListener("keyup", handleKeyPress);
   }, [handleKeyPress]);
-
   useEffect(() => {
-    if (previousAttemptsLength === 6 && !timeOutRef.current) {
-      setTimeout(() => showGameEnd(MESSAGES.LOST), 500);
+    if (previousAttemptsLength === 6 && !gameOverMessage) {
+      dispatch({
+        type: gameStateActions.SET_GAME_OVER_MESSAGE,
+        payload: MESSAGES.LOST,
+      });
+      setTimeout(() => showGameEnd(), 500);
     }
-  }, [previousAttemptsLength, showGameEnd]);
+  }, [previousAttemptsLength, gameOverMessage, showGameEnd]);
+  useEffect(() => {
+    if (timeup && !gameOverMessage) {
+      dispatch({
+        type: gameStateActions.SET_GAME_OVER_MESSAGE,
+        payload: MESSAGES.TIME_UP,
+      });
+      setTimeout(() => showGameEnd(), 500);
+    }
+  }, [timeup, gameOverMessage, showGameEnd]);
   return (
     <>
       {SECRET && (
@@ -163,15 +168,6 @@ function Wordle() {
           }}
         >
           <>
-            <Header
-              timer={timer}
-              onTimerEnd={() => {
-                timeOutRef.current = setTimeout(
-                  () => showGameEnd(MESSAGES.TIME_UP),
-                  500
-                );
-              }}
-            />
             <Box
               sx={{
                 height: "100vh",
@@ -190,7 +186,6 @@ function Wordle() {
                 onClick={handleKeyPress}
               />
             </Box>
-            <Footer />
             <Modal
               open={difficultyModalState}
               heading={MESSAGES.CHOOSE_DIFFICULTY}

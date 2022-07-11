@@ -6,9 +6,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import useTheme from "../customHooks/useTheme";
-import Timer from "./Timer";
-import { MaterialUISwitch } from "./ThemeSwitch";
+import useTheme from "../../customHooks/useTheme";
+import Timer from "../Timer";
+import { MaterialUISwitch } from "../ThemeSwitch";
 
 type ResponsiveAppBarTypes = {
   timer: number;
