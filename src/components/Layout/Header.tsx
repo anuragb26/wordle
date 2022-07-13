@@ -1,4 +1,8 @@
 import React, { useState, ReactElement } from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -50,7 +54,7 @@ export default function ResponsiveAppBar({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              flexGrow: "3",
+              width: "70%",
             }}
           >
             <PsychologyIcon sx={{ display: { xs: "flex" }, mr: 1 }} />
@@ -73,7 +77,7 @@ export default function ResponsiveAppBar({
               Wordle
             </Typography>
           </Box>
-          <Box sx={{ flexGrow: "1", display: "flex", flexDirection: "row" }}>
+          <Box sx={{ display: "flex", flexDirection: "row", width: "15%" }}>
             <FormControlLabel
               control={
                 <MaterialUISwitch
@@ -86,6 +90,43 @@ export default function ResponsiveAppBar({
               label=""
             />
             {timer !== 0 && <Timer timer={timer} onTimerEnd={onTimerEnd} />}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row-reverse",
+              width: "15%",
+            }}
+          >
+            <List
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingTop: "0px",
+                paddingBottom: "0px",
+              }}
+            >
+              <ListItem
+                style={{
+                  paddingLeft: "0px",
+                  paddingRight: "0px",
+                }}
+              >
+                <Button component={Link} to="/login" sx={{ ...typography }}>
+                  Login
+                </Button>
+              </ListItem>
+              <ListItem
+                style={{
+                  paddingLeft: "0px",
+                  paddingRight: "0px",
+                }}
+              >
+                <Button component={Link} to="/signup" sx={{ ...typography }}>
+                  Signup
+                </Button>
+              </ListItem>
+            </List>
           </Box>
         </Toolbar>
       </Container>
