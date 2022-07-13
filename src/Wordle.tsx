@@ -11,7 +11,6 @@ import Keyboard from "./components/Keyboard";
 import Modal from "./components/Modal";
 import { Button } from "@mui/material";
 import Difficulty from "./components/Difficulty";
-import useTheme from "./customHooks/useTheme";
 import useModal from "./customHooks/useModal";
 import useRandomWord from "./customHooks/useRandomWord";
 import useCounter from "./customHooks/useCounter";
@@ -57,7 +56,6 @@ const getSecretLetterMap = (secret: string): SecretLetterMap => {
 };
 
 function Wordle() {
-  const { theme } = useTheme();
   const { setTimer, timeup, setTimeup } = useCounter();
   const [
     { currentAttempt, previousAttempts, gameOverMessage } = initialGameState,
@@ -157,60 +155,27 @@ function Wordle() {
   return (
     <>
       {SECRET && (
-        <Box
-          sx={{
-            marginTop: "0.5rem",
-            overflowX: "hidden",
-            width: "100%",
-            maxWidth: "100%",
-            // disableGutters: true,
-            ...theme.box,
-          }}
-        >
-          <>
-            <Box
-              sx={{
-                height: "100vh",
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                marginTop: "5rem",
-              }}
-            >
-              <Grid
-                previousAttempts={previousAttempts}
-                currentAttempt={currentAttempt}
-              />
-              <Keyboard
-                previousAttempts={previousAttempts}
-                onClick={handleKeyPress}
-              />
-            </Box>
-            <Modal
-              open={difficultyModalState}
-              heading={MESSAGES.CHOOSE_DIFFICULTY}
-            >
-              <Difficulty onSelect={chooseDifficulty} />
-            </Modal>
-            <Modal open={gameOverModal} heading={gameOverMessage}>
-              {gameOverMessage && (
-                <div>
-                  {[MESSAGES.TIME_UP, MESSAGES.LOST].includes(
-                    gameOverMessage
-                  ) && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      Secret Word:
-                      <b>
-                        <i>{SECRET}</i>
-                      </b>
-                    </Box>
-                  )}
+        <>
+          <Grid
+            previousAttempts={previousAttempts}
+            currentAttempt={currentAttempt}
+          />
+          <Keyboard
+            previousAttempts={previousAttempts}
+            onClick={handleKeyPress}
+          />
+          <Modal
+            open={difficultyModalState}
+            heading={MESSAGES.CHOOSE_DIFFICULTY}
+          >
+            <Difficulty onSelect={chooseDifficulty} />
+          </Modal>
+          <Modal open={gameOverModal} heading={gameOverMessage}>
+            {gameOverMessage && (
+              <div>
+                {[MESSAGES.TIME_UP, MESSAGES.LOST].includes(
+                  gameOverMessage
+                ) && (
                   <Box
                     sx={{
                       display: "flex",
@@ -218,15 +183,27 @@ function Wordle() {
                       alignItems: "center",
                     }}
                   >
-                    <Button onClick={playAgain}>
-                      <strong>PLAY AGAIN!</strong>
-                    </Button>
+                    Secret Word:
+                    <b>
+                      <i>{SECRET}</i>
+                    </b>
                   </Box>
-                </div>
-              )}
-            </Modal>
-          </>
-        </Box>
+                )}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button onClick={playAgain}>
+                    <strong>PLAY AGAIN!</strong>
+                  </Button>
+                </Box>
+              </div>
+            )}
+          </Modal>
+        </>
       )}
     </>
   );

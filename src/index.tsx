@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import Wordle from "./Wordle";
+import Router from "./components/Router/Router";
 import Layout from "./components/Layout/Layout";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { CounterProvider } from "./providers/CounterProvider";
@@ -13,9 +14,11 @@ root.render(
   <React.StrictMode>
     <ThemeProvider>
       <CounterProvider>
-        <Layout>
-          <Wordle />
-        </Layout>
+        <BrowserRouter>
+          <Layout>
+            <Router />
+          </Layout>
+        </BrowserRouter>
       </CounterProvider>
     </ThemeProvider>
   </React.StrictMode>
