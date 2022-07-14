@@ -19,6 +19,7 @@ function Layout(props: LayoutProps): ReactElement {
         overflowX: "hidden",
         width: "100%",
         maxWidth: "100%",
+        height: "100vh",
         ...theme.box,
       }}
     >
@@ -30,7 +31,7 @@ function Layout(props: LayoutProps): ReactElement {
       />
       <Box
         sx={{
-          height: "100vh",
+          height: "80vh",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",

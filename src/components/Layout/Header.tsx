@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import useTheme from "../../customHooks/useTheme";
+import useDefaultTheme from "../../customHooks/useDefaultTheme";
 import Timer from "../Timer";
 import { MaterialUISwitch } from "../ThemeSwitch";
 
@@ -28,9 +29,10 @@ export default function ResponsiveAppBar({
   const handleChange = () => {
     setChecked(!checked);
     toggleTheme();
+    toggleColorMode();
   };
   const { header = {}, typography = {} } = theme;
-
+  const { toggleColorMode } = useDefaultTheme();
   return (
     <AppBar
       position="fixed"

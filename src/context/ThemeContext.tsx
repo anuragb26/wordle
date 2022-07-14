@@ -6,7 +6,12 @@ const initialState = {
 };
 
 export type themeState = "light" | "dark";
-export type themeSectionTypes = "header" | "footer" | "typography" | "box";
+export type themeSectionTypes =
+  | "header"
+  | "footer"
+  | "typography"
+  | "box"
+  | "paper";
 export type ThemeType = {
   [key in themeState]: { [key in themeSectionTypes]?: {} };
 };

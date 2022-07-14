@@ -18,12 +18,14 @@ export const ThemeProvider = ({
       footer: { ...genericDark },
       typography: { color: COLORS.WHITE },
       box: { ...genericDark },
+      paper: { ...genericDark },
     },
     light: {
       header: { ...genericLight },
       footer: { ...genericLight },
       typography: { color: COLORS.BLACK },
       box: { ...genericLight },
+      paper: { ...genericLight },
     },
   };
   const toggleTheme = () => {
