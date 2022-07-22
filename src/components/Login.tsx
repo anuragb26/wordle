@@ -10,9 +10,25 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import useCustomTheme from "../customHooks/useTheme";
+import useForm from "../customHooks/useForm";
 
+type LoginFormProps = {
+  password: { value: string };
+  email: { value: string };
+};
+const initialValues: LoginFormProps = {
+  password: { value: "" },
+  email: { value: "" },
+};
 function Login(): ReactElement {
+  const formSubmitApi = () => {
+    console.log("in submit");
+  };
   const { theme: customTheme } = useCustomTheme();
+  const [values, onChange, onSubmit] = useForm<LoginFormProps>(
+    initialValues,
+    formSubmitApi
+  );
   return (
     <Container
       maxWidth="sm"
@@ -35,7 +51,7 @@ function Login(): ReactElement {
         }}
       >
         <form
-          onSubmit={() => {}}
+          onSubmit={onSubmit}
           style={{ width: "100%", marginLeft: "1rem", marginRight: "1rem" }}
         >
           <Grid container={true}>
@@ -50,10 +66,10 @@ function Login(): ReactElement {
               <FormControl fullWidth={true}>
                 <Input
                   placeholder="E-mail address"
-                  value={""}
+                  value={values.email.value}
                   type="email"
                   name="email"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>
@@ -68,11 +84,11 @@ function Login(): ReactElement {
             <Grid item={true} xs={11} sx={{ mb: "16px" }}>
               <FormControl fullWidth={true}>
                 <Input
-                  value={""}
+                  value={values.password.value}
                   type="password"
                   name="password"
                   placeholder="Password"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>

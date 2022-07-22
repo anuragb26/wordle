@@ -11,8 +11,29 @@ import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import useCustomTheme from "../customHooks/useTheme";
+import useForm from "../customHooks/useForm";
+
+type SignupFormProps = {
+  firstName: { value: string };
+  lastName: { value: string };
+  email: { value: string };
+  password: { value: string };
+};
+const initialValues: SignupFormProps = {
+  firstName: { value: "" },
+  lastName: { value: "" },
+  email: { value: "" },
+  password: { value: "" },
+};
 
 function Signup(): ReactElement {
+  const formSubmitApi = () => {
+    console.log("in form Submit Api");
+  };
+  const [values, onChange, onSubmit] = useForm<SignupFormProps>(
+    initialValues,
+    formSubmitApi
+  );
   const { theme: customTheme } = useCustomTheme();
   return (
     <Container
@@ -36,7 +57,7 @@ function Signup(): ReactElement {
         }}
       >
         <form
-          onSubmit={() => {}}
+          onSubmit={onSubmit}
           style={{ width: "100%", marginLeft: "1rem", marginRight: "1rem" }}
         >
           <Grid container={true}>
@@ -51,10 +72,10 @@ function Signup(): ReactElement {
               <FormControl fullWidth={true}>
                 <Input
                   placeholder="First Name"
-                  value={""}
+                  value={values.firstName.value}
                   type="text"
                   name="firstName"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>
@@ -70,10 +91,10 @@ function Signup(): ReactElement {
               <FormControl fullWidth={true}>
                 <Input
                   placeholder="Last Name"
-                  value={""}
+                  value={values.lastName.value}
                   type="text"
                   name="lastName"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>
@@ -89,10 +110,10 @@ function Signup(): ReactElement {
               <FormControl fullWidth={true}>
                 <Input
                   placeholder="E-mail address"
-                  value={""}
+                  value={values.email.value}
                   type="email"
                   name="email"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>
@@ -107,11 +128,11 @@ function Signup(): ReactElement {
             <Grid item={true} xs={11} sx={{ mb: "16px" }}>
               <FormControl fullWidth={true}>
                 <Input
-                  value={""}
+                  value={values.password.value}
                   type="password"
                   name="password"
                   placeholder="Password"
-                  onChange={() => {}}
+                  onChange={onChange}
                   fullWidth={true}
                 />
               </FormControl>
