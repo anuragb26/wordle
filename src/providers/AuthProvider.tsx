@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       const res = await axios({
         method: "POST",
         data: { email, password },
-        url: "https://young-stream-49707.herokuapp.com/auth",
+        url: `${process.env.REACT_APP_API_URL}/auth`,
       });
       dispatch({ type: authStateActions.LOGIN_SUCCESS });
     } catch (err) {
