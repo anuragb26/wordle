@@ -7,6 +7,7 @@ import Layout from "./components/Layout/Layout";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { CounterProvider } from "./providers/CounterProvider";
 import { DefaultThemeProvider } from "./providers/DefaultThemeProvider";
+import { AuthProvider } from "./providers/AuthProvider";
 
 const rootHtml = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(rootHtml);
@@ -16,11 +17,13 @@ root.render(
     <DefaultThemeProvider>
       <ThemeProvider>
         <CounterProvider>
-          <BrowserRouter>
-            <Layout>
-              <Router />
-            </Layout>
-          </BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter>
+              <Layout>
+                <Router />
+              </Layout>
+            </BrowserRouter>
+          </AuthProvider>
         </CounterProvider>
       </ThemeProvider>
     </DefaultThemeProvider>

@@ -11,6 +11,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import useCustomTheme from "../customHooks/useTheme";
 import useForm from "../customHooks/useForm";
+import useAuth from "../customHooks/useAuth";
 
 type LoginFormProps = {
   password: { value: string };
@@ -21,14 +22,15 @@ const initialValues: LoginFormProps = {
   email: { value: "" },
 };
 function Login(): ReactElement {
-  const formSubmitApi = () => {
-    console.log("in submit");
-  };
   const { theme: customTheme } = useCustomTheme();
+  const { login, loggedIn } = useAuth();
   const [values, onChange, onSubmit] = useForm<LoginFormProps>(
     initialValues,
     formSubmitApi
   );
+  async function formSubmitApi() {
+    await login({ email: values.email.value, password: values.password.value });
+  }
   return (
     <Container
       maxWidth="sm"
