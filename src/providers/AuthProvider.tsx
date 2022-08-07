@@ -6,7 +6,10 @@ import { authStateActions } from "../actions";
 
 type AuthProviderProps = { children: ReactNode };
 
-type ErrorResponseProps = { data: { errors: Array<string>; error: string } };
+type error = { msg: string | null };
+type ErrorResponseProps = {
+  data: { errors: Array<error | string>; error: string };
+};
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
@@ -31,9 +34,15 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
         if (err?.response) {
           const { data } = err.response as ErrorResponseProps;
           if (data?.errors) console.log("error in login", data.errors[0]);
+          let payload;
+          if (typeof data.errors[0] === "string") {
+            payload = data.errors[0];
+          } else {
+            payload = data.errors[0].msg;
+          }
           dispatch({
             type: authStateActions.LOGIN_FAILED,
-            payload: data.errors[0],
+            payload,
           });
         } else {
           dispatch({
@@ -65,19 +74,21 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       console.log("signup sucess");
       dispatch({ type: authStateActions.SIGNUP_SUCCESS });
     } catch (err) {
-      console.log("befor if in axios error", err);
       if (axios.isAxiosError(err)) {
-        console.log("in axios error", err.response);
         if (err?.response) {
           const { data } = err.response as ErrorResponseProps;
           if (data?.errors) {
-            console.log("error in signup", data.errors[0]);
+            let payload;
+            if (typeof data.errors[0] === "string") {
+              payload = data.errors[0];
+            } else {
+              payload = data.errors[0].msg;
+            }
             dispatch({
               type: authStateActions.SIGNUP_FAILED,
-              payload: data.errors[0],
+              payload,
             });
           } else if (data?.error) {
-            console.log("error in signup", data.error);
             dispatch({
               type: authStateActions.SIGNUP_FAILED,
               payload: data.error,

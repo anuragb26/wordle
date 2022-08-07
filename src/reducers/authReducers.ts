@@ -46,13 +46,18 @@ export const authReducer = (
 ): authReducerType => {
   switch (action.type) {
     case authStateActions.LOGIN_SUCCESS: {
-      return { ...state, loggedIn: true, loading: false };
+      return { ...state, loggedIn: true, loading: false, error: null };
+    }
+    case authStateActions.SIGNUP_SUCCESS: {
+      return { ...state, loggedIn: true, loading: false, error: null };
     }
     case authStateActions.LOGIN_FAILED: {
       return { ...state, error: action.payload, loading: false };
     }
+    case authStateActions.SIGNUP_FAILED: {
+      return { ...state, error: action.payload, loading: false };
+    }
     case authStateActions.LOADING: {
-      console.log("in loading");
       return { ...state, loading: true };
     }
     default: {

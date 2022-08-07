@@ -7,6 +7,7 @@ import {
   Button,
   Paper,
   Box,
+  Alert,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
@@ -30,7 +31,7 @@ const initialValues: SignupFormProps = {
 };
 
 function Signup(): ReactElement {
-  const { signup, loading } = useAuth();
+  const { signup, loading, error } = useAuth();
   const [values, onChange, onSubmit] = useForm<SignupFormProps>(
     initialValues,
     formSubmitApi
@@ -161,6 +162,9 @@ function Signup(): ReactElement {
                   <Loader style={{ position: "absolute", right: "1em" }} />
                 ) : null}
               </Button>
+            </Grid>
+            <Grid item={true} xs={12} sx={{ mb: "16px" }}>
+              {error ? <Alert severity="error">{error}</Alert> : null}
             </Grid>
           </Grid>
         </form>
