@@ -3,6 +3,7 @@ export const LOGOUT = "LOGOUT";
 export const LOGIN_FAILED = "LOGIN_FAILED";
 export const SIGNUP = "SIGNUP";
 export const SIGNUP_FAILED = "SIGNUP_FAILED";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 
 export enum authStateActions {
   LOGIN_SUCCESS = "LOGIN_SUCCESS",
@@ -10,4 +11,5 @@ export enum authStateActions {
   LOGIN_FAILED = "LOGIN_FAILED",
   SIGNUP = "SIGNUP",
   SIGNUP_FAILED = "SIGNUP_FAILED",
+  SIGNUP_SUCCESS = "SIGNUP_SUCCESS",
 }

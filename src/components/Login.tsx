@@ -23,7 +23,7 @@ const initialValues: LoginFormProps = {
 };
 function Login(): ReactElement {
   const { theme: customTheme } = useCustomTheme();
-  const { login, loggedIn } = useAuth();
+  const { login } = useAuth();
   const [values, onChange, onSubmit] = useForm<LoginFormProps>(
     initialValues,
     formSubmitApi

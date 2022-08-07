@@ -20,6 +20,10 @@ type authStateActionTypes =
   | {
       type: authStateActions.SIGNUP_FAILED;
       payload: authContextState["error"];
+    }
+  | {
+      type: authStateActions.SIGNUP_SUCCESS;
+      payload?: {};
     };
 type authReducerType = Pick<authContextState, "loggedIn" | "user" | "error">;
 

@@ -12,6 +12,7 @@ import PasswordIcon from "@mui/icons-material/Password";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import useCustomTheme from "../customHooks/useTheme";
 import useForm from "../customHooks/useForm";
+import useAuth from "../customHooks/useAuth";
 
 type SignupFormProps = {
   firstName: { value: string };
@@ -27,13 +28,19 @@ const initialValues: SignupFormProps = {
 };
 
 function Signup(): ReactElement {
-  const formSubmitApi = () => {
-    console.log("in form Submit Api");
-  };
+  const { signup } = useAuth();
   const [values, onChange, onSubmit] = useForm<SignupFormProps>(
     initialValues,
     formSubmitApi
   );
+  async function formSubmitApi() {
+    await signup({
+      firstName: values.firstName.value,
+      lastName: values.lastName.value,
+      email: values.email.value,
+      password: values.password.value,
+    });
+  }
   const { theme: customTheme } = useCustomTheme();
   return (
     <Container
