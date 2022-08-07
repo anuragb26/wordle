@@ -12,6 +12,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import useTheme from "../../customHooks/useTheme";
 import useDefaultTheme from "../../customHooks/useDefaultTheme";
+import useAuth from "../../customHooks/useAuth";
 import Timer from "../Timer";
 import { MaterialUISwitch } from "../ThemeSwitch";
 
@@ -24,6 +25,7 @@ export default function ResponsiveAppBar({
   timer,
   onTimerEnd,
 }: ResponsiveAppBarTypes): ReactElement {
+  const { clearError } = useAuth();
   const [checked, setChecked] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
   const handleChange = () => {
@@ -114,7 +116,14 @@ export default function ResponsiveAppBar({
                   paddingRight: "0px",
                 }}
               >
-                <Button component={Link} to="/login" sx={{ ...typography }}>
+                <Button
+                  component={Link}
+                  to="/login"
+                  sx={{ ...typography }}
+                  onClick={() => {
+                    clearError();
+                  }}
+                >
                   Login
                 </Button>
               </ListItem>
@@ -124,7 +133,14 @@ export default function ResponsiveAppBar({
                   paddingRight: "0px",
                 }}
               >
-                <Button component={Link} to="/signup" sx={{ ...typography }}>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  sx={{ ...typography }}
+                  onClick={() => {
+                    clearError();
+                  }}
+                >
                   Signup
                 </Button>
               </ListItem>

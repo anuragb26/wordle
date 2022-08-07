@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   login: async () => {},
   signup: async () => {},
+  clearError: () => {},
 };
 
 export type authContextState = {
@@ -32,6 +33,7 @@ export type authContextState = {
     email: string;
     password: string;
   }) => Promise<void>;
+  clearError: () => void;
 };
 
 export const AuthContext = createContext<authContextState>(initialState);

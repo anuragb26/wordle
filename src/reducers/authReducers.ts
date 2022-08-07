@@ -27,6 +27,9 @@ type authStateActionTypes =
     }
   | {
       type: authStateActions.LOADING;
+    }
+  | {
+      type: authStateActions.CLEAR_ERROR;
     };
 type authReducerType = Pick<
   authContextState,
@@ -59,6 +62,9 @@ export const authReducer = (
     }
     case authStateActions.LOADING: {
       return { ...state, loading: true };
+    }
+    case authStateActions.CLEAR_ERROR: {
+      return { ...state, error: null };
     }
     default: {
       return { ...state };

@@ -103,8 +103,11 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       }
     }
   };
+  const clearError = () => {
+    dispatch({ type: authStateActions.CLEAR_ERROR });
+  };
   return (
-    <AuthContext.Provider value={{ ...state, login, signup }}>
+    <AuthContext.Provider value={{ ...state, login, signup, clearError }}>
       {children}
     </AuthContext.Provider>
   );

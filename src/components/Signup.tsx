@@ -36,6 +36,12 @@ function Signup(): ReactElement {
     initialValues,
     formSubmitApi
   );
+  // useEffect(() => {
+  //   console.log("in useEffect");
+  //   return () => {
+  //     clearError();
+  //   };
+  // }, [clearError]);
   async function formSubmitApi() {
     await signup({
       firstName: values.firstName.value,
