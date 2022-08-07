@@ -6,12 +6,14 @@ import {
   FormControl,
   Button,
   Paper,
+  Box,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import useCustomTheme from "../customHooks/useTheme";
 import useForm from "../customHooks/useForm";
 import useAuth from "../customHooks/useAuth";
+import Loader from "./Loader";
 
 type LoginFormProps = {
   password: { value: string };
@@ -23,7 +25,7 @@ const initialValues: LoginFormProps = {
 };
 function Login(): ReactElement {
   const { theme: customTheme } = useCustomTheme();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const [values, onChange, onSubmit] = useForm<LoginFormProps>(
     initialValues,
     formSubmitApi
@@ -100,11 +102,15 @@ function Login(): ReactElement {
                 variant="outlined"
                 type="submit"
                 sx={{
+                  position: "relative",
                   ...customTheme.typography,
                 }}
                 fullWidth={true}
               >
-                Login
+                <Box>Login</Box>
+                {loading ? (
+                  <Loader style={{ position: "absolute", right: "1em" }} />
+                ) : null}
               </Button>
             </Grid>
           </Grid>

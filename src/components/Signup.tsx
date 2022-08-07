@@ -6,6 +6,7 @@ import {
   FormControl,
   Button,
   Paper,
+  Box,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
@@ -13,6 +14,7 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import useCustomTheme from "../customHooks/useTheme";
 import useForm from "../customHooks/useForm";
 import useAuth from "../customHooks/useAuth";
+import Loader from "./Loader";
 
 type SignupFormProps = {
   firstName: { value: string };
@@ -28,7 +30,7 @@ const initialValues: SignupFormProps = {
 };
 
 function Signup(): ReactElement {
-  const { signup } = useAuth();
+  const { signup, loading } = useAuth();
   const [values, onChange, onSubmit] = useForm<SignupFormProps>(
     initialValues,
     formSubmitApi
@@ -149,11 +151,15 @@ function Signup(): ReactElement {
                 variant="outlined"
                 type="submit"
                 sx={{
+                  postion: "relative",
                   ...customTheme.typography,
                 }}
                 fullWidth={true}
               >
-                Signup
+                <Box>Signup</Box>
+                {loading ? (
+                  <Loader style={{ position: "absolute", right: "1em" }} />
+                ) : null}
               </Button>
             </Grid>
           </Grid>

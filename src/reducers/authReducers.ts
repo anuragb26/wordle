@@ -24,13 +24,20 @@ type authStateActionTypes =
   | {
       type: authStateActions.SIGNUP_SUCCESS;
       payload?: {};
+    }
+  | {
+      type: authStateActions.LOADING;
     };
-type authReducerType = Pick<authContextState, "loggedIn" | "user" | "error">;
+type authReducerType = Pick<
+  authContextState,
+  "loggedIn" | "user" | "error" | "loading"
+>;
 
 export const initialAuthState: authReducerType = {
   user: null,
   loggedIn: false,
   error: "",
+  loading: false,
 };
 
 export const authReducer = (
@@ -39,10 +46,14 @@ export const authReducer = (
 ): authReducerType => {
   switch (action.type) {
     case authStateActions.LOGIN_SUCCESS: {
-      return { ...state, loggedIn: true };
+      return { ...state, loggedIn: true, loading: false };
     }
     case authStateActions.LOGIN_FAILED: {
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, loading: false };
+    }
+    case authStateActions.LOADING: {
+      console.log("in loading");
+      return { ...state, loading: true };
     }
     default: {
       return { ...state };

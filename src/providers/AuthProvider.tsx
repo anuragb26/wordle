@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     password: string;
   }) => {
     try {
+      dispatch({ type: authStateActions.LOADING });
       await axios({
         method: "POST",
         data: { email, password },
@@ -29,18 +30,16 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       if (axios.isAxiosError(err)) {
         if (err?.response) {
           const { data } = err.response as ErrorResponseProps;
-          if (data?.errors) {
-            console.log("error in login", data.errors[0]);
-            dispatch({
-              type: authStateActions.LOGIN_FAILED,
-              payload: data.errors[0],
-            });
-          } else {
-            dispatch({
-              type: authStateActions.LOGIN_FAILED,
-              payload: "unknown error",
-            });
-          }
+          if (data?.errors) console.log("error in login", data.errors[0]);
+          dispatch({
+            type: authStateActions.LOGIN_FAILED,
+            payload: data.errors[0],
+          });
+        } else {
+          dispatch({
+            type: authStateActions.LOGIN_FAILED,
+            payload: "unknown error",
+          });
         }
       }
     }
@@ -57,6 +56,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     password: string;
   }) => {
     try {
+      dispatch({ type: authStateActions.LOADING });
       await axios({
         method: "POST",
         data: { email, password, firstName, lastName },

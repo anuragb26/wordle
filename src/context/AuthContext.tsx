@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 const initialState = {
+  loading: false,
   loggedIn: false,
   user: {},
   error: null,
@@ -9,6 +10,7 @@ const initialState = {
 };
 
 export type authContextState = {
+  loading: Boolean;
   loggedIn: Boolean;
   user: { firstName?: string; lastName?: string; email?: string } | null;
   error: null | string;
