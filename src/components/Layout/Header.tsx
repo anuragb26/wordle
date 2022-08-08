@@ -2,6 +2,9 @@ import React, { useState, ReactElement } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,12 +12,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Drawer from "@mui/material/Drawer";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import useTheme from "../../customHooks/useTheme";
 import useDefaultTheme from "../../customHooks/useDefaultTheme";
 import useAuth from "../../customHooks/useAuth";
 import Timer from "../Timer";
 import { MaterialUISwitch } from "../ThemeSwitch";
+import useCounter from "../../customHooks/useCounter";
 
 type ResponsiveAppBarTypes = {
   timer: number;
@@ -26,8 +31,19 @@ export default function ResponsiveAppBar({
   onTimerEnd,
 }: ResponsiveAppBarTypes): ReactElement {
   const { clearError } = useAuth();
+  const { setTimer } = useCounter();
   const [checked, setChecked] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
+  const [open, setState] = useState(false);
+  const toggleDrawer = (open: boolean) => (event: any) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setState(open);
+  };
   const handleChange = () => {
     setChecked(!checked);
     toggleTheme();
@@ -35,6 +51,61 @@ export default function ResponsiveAppBar({
   };
   const { header = {}, typography = {} } = theme;
   const { toggleColorMode } = useDefaultTheme();
+  const navigation = () => (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row-reverse" },
+        width: { sm: "100%", md: "15%" },
+      }}
+    >
+      <List
+        style={{
+          display: "flex",
+          paddingTop: "0px",
+          paddingBottom: "0px",
+        }}
+        sx={{ flexDirection: { xs: "column", md: "row" } }}
+      >
+        <ListItem
+          sx={{
+            paddingLeft: { xs: "16px", md: "0px" },
+            paddingRight: { xs: "16px", md: "0px" },
+          }}
+        >
+          <Button
+            component={Link}
+            to="/login"
+            sx={{ ...typography }}
+            onClick={() => {
+              clearError();
+              setTimer(0);
+            }}
+          >
+            Login
+          </Button>
+        </ListItem>
+        <ListItem
+          sx={{
+            paddingLeft: { xs: "16px", md: "0px" },
+            paddingRight: { xs: "16px", md: "0px" },
+          }}
+        >
+          <Button
+            component={Link}
+            to="/signup"
+            sx={{ ...typography }}
+            onClick={() => {
+              clearError();
+              setTimer(0);
+            }}
+          >
+            Signup
+          </Button>
+        </ListItem>
+      </List>
+    </Box>
+  );
   return (
     <AppBar
       position="fixed"
@@ -53,12 +124,20 @@ export default function ResponsiveAppBar({
             flexDirection: "row",
           }}
         >
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={toggleDrawer(true)}
+            sx={{ display: { sm: "block", md: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Box
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              width: "70%",
+              width: { xs: "50%", sm: "70%" },
             }}
           >
             <PsychologyIcon sx={{ display: { xs: "flex" }, mr: 1 }} />
@@ -95,57 +174,22 @@ export default function ResponsiveAppBar({
             />
             {timer !== 0 && <Timer timer={timer} onTimerEnd={onTimerEnd} />}
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row-reverse",
-              width: "15%",
-            }}
-          >
-            <List
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                paddingTop: "0px",
-                paddingBottom: "0px",
-              }}
-            >
-              <ListItem
-                style={{
-                  paddingLeft: "0px",
-                  paddingRight: "0px",
-                }}
-              >
-                <Button
-                  component={Link}
-                  to="/login"
-                  sx={{ ...typography }}
-                  onClick={() => {
-                    clearError();
-                  }}
-                >
-                  Login
-                </Button>
-              </ListItem>
-              <ListItem
-                style={{
-                  paddingLeft: "0px",
-                  paddingRight: "0px",
-                }}
-              >
-                <Button
-                  component={Link}
-                  to="/signup"
-                  sx={{ ...typography }}
-                  onClick={() => {
-                    clearError();
-                  }}
-                >
-                  Signup
-                </Button>
-              </ListItem>
-            </List>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
+            {navigation()}
           </Box>
+          <Drawer
+            //from which side the drawer slides in
+            anchor="left"
+            //if open is true --> drawer is shown
+            open={open}
+            //function that is called when the drawer should close
+            onClose={toggleDrawer(false)}
+          >
+            <IconButton sx={{ mb: 2, pt: 2 }}>
+              <CloseIcon onClick={toggleDrawer(false)} />
+            </IconButton>
+            {navigation()}
+          </Drawer>
         </Toolbar>
       </Container>
     </AppBar>
