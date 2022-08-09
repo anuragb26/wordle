@@ -62,16 +62,16 @@ function Wordle() {
     dispatch,
   ] = useReducer(gameStateReducer, initialGameState);
   const [SECRET, setSecret] = useRandomWord();
-  const [difficultyModalState, toggleDifficultyModal] = useModal();
+  const [wizardOpen, toggleWizard] = useModal();
   const [gameOverModal, toggleGameOverModal] = useModal();
   const pageLoadModalRef = useRef<boolean>(false);
   const previousAttemptsLength = previousAttempts.length;
   const chooseDifficulty = React.useCallback(
     (event: SyntheticEvent) => {
       setTimer(parseInt((event.target as HTMLInputElement).value));
-      toggleDifficultyModal();
+      toggleWizard();
     },
-    [toggleDifficultyModal, setTimer]
+    [toggleWizard, setTimer]
   );
   const showGameEnd = useCallback(() => {
     toggleGameOverModal();
@@ -127,7 +127,7 @@ function Wordle() {
   useEffect(() => {
     if (!pageLoadModalRef.current) {
       pageLoadModalRef.current = true;
-      setTimeout(() => toggleDifficultyModal(), 1000);
+      setTimeout(() => toggleWizard(), 1000);
     }
   });
   useEffect(() => {
@@ -164,10 +164,7 @@ function Wordle() {
             previousAttempts={previousAttempts}
             onClick={handleKeyPress}
           />
-          <Modal
-            open={difficultyModalState}
-            heading={MESSAGES.CHOOSE_DIFFICULTY}
-          >
+          <Modal open={wizardOpen} heading={MESSAGES.CHOOSE_DIFFICULTY}>
             <Difficulty onSelect={chooseDifficulty} />
           </Modal>
           <Modal open={gameOverModal} heading={gameOverMessage}>
