@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, MouseEvent } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
@@ -35,13 +35,7 @@ export default function ResponsiveAppBar({
   const [checked, setChecked] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
   const [open, setState] = useState(false);
-  const toggleDrawer = (open: boolean) => (event: any) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleDrawer = (open: boolean) => (event: MouseEvent) => {
     setState(open);
   };
   const handleChange = () => {
