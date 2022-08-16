@@ -11,6 +11,7 @@ import Keyboard from "./components/Keyboard";
 import Modal from "./components/Modal";
 import { Button } from "@mui/material";
 import Difficulty from "./components/Difficulty";
+import { Wizard } from "./components/Wizard";
 import useModal from "./customHooks/useModal";
 import useRandomWord from "./customHooks/useRandomWord";
 import useCounter from "./customHooks/useCounter";
@@ -165,7 +166,8 @@ function Wordle() {
             onClick={handleKeyPress}
           />
           <Modal open={wizardOpen} heading={MESSAGES.CHOOSE_DIFFICULTY}>
-            <Difficulty onSelect={chooseDifficulty} />
+            {/* <Difficulty onSelect={chooseDifficulty} /> */}
+            <Wizard />
           </Modal>
           <Modal open={gameOverModal} heading={gameOverMessage}>
             {gameOverMessage && (
