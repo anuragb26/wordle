@@ -1,12 +1,26 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Radio from "@mui/material/Radio";
 import { Typography } from "@mui/material";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
-const steps = [
-  { heading: "Grid Size", component: (props: any) => <GridSize {...props} /> },
-  { heading: "Category", component: (props: any) => <Category {...props} /> },
-  { heading: "Timer", component: (props: any) => <Timer {...props} /> },
+export const steps = [
+  {
+    heading: "Select Grid Size",
+    component: (props: any) => <GridSize {...props} />,
+  },
+  {
+    heading: "Select Category",
+    component: (props: any) => <Category {...props} />,
+  },
+  {
+    heading: "Select Difficulty",
+    component: (props: any) => <Timer {...props} />,
+  },
   { heading: "Play", component: (props: any) => <Play {...props} /> },
 ];
 
@@ -19,8 +33,8 @@ const NavigationButtons = ({
   showNext?: boolean;
   showPrevious?: boolean;
 }) => (
-  <Box sx={{ display: "flex", width: "100%" }}>
-    <Box sx={{ display: "flex", width: "15%" }}>
+  <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+    <Box>
       {showPrevious && (
         <Button
           onClick={() => {
@@ -31,7 +45,7 @@ const NavigationButtons = ({
         </Button>
       )}
     </Box>
-    <Box sx={{ display: "flex", width: "15%" }}>
+    <Box>
       {showNext && (
         <Button
           onClick={() => {
@@ -52,8 +66,22 @@ const GridSize = ({
 }) => {
   return (
     <>
-      <Box>
-        <Typography>Show radio buttons for grid size</Typography>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <FormControl>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="5"
+            name="radio-buttons-group"
+            row
+          >
+            <FormControlLabel value="5" control={<Radio />} label="5" />
+            <FormControlLabel value="6" control={<Radio />} label="6" />
+            <FormControlLabel value="7" control={<Radio />} label="7" />
+            <FormControlLabel value="8" control={<Radio />} label="8" />
+          </RadioGroup>
+        </FormControl>
       </Box>
       <NavigationButtons setActiveStep={setActiveStep} showPrevious={false} />
     </>
@@ -96,7 +124,13 @@ const Play = ({ setActiveStep }: { setActiveStep: () => void }) => {
   );
 };
 
-export const Wizard = () => {
-  const [activeStep, setActiveStep] = useState<number>(0);
+export const Wizard = ({
+  activeStep,
+  setActiveStep,
+}: {
+  activeStep: number;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+}) => {
+  // const [activeStep, setActiveStep] = useState<number>(0);
   return <>{steps[activeStep].component({ setActiveStep })}</>;
 };
