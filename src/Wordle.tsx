@@ -4,7 +4,6 @@ import React, {
   useRef,
   useReducer,
   SyntheticEvent,
-  useState,
 } from "react";
 import Box from "@mui/material/Box";
 import Grid from "./components/Grid";
@@ -12,7 +11,7 @@ import Keyboard from "./components/Keyboard";
 import Modal from "./components/Modal";
 import { Button } from "@mui/material";
 import Difficulty from "./components/Difficulty";
-import { Wizard, steps } from "./components/Wizard";
+import { Wizard } from "./components/Wizard";
 import useModal from "./customHooks/useModal";
 import useRandomWord from "./customHooks/useRandomWord";
 import useCounter from "./customHooks/useCounter";
@@ -63,7 +62,6 @@ function Wordle() {
     { currentAttempt, previousAttempts, gameOverMessage } = initialGameState,
     dispatch,
   ] = useReducer(gameStateReducer, initialGameState);
-  const [activeStep, setActiveStep] = useState<number>(0);
   const [SECRET, setSecret] = useRandomWord();
   const [wizardOpen, toggleWizard] = useModal();
   const [gameOverModal, toggleGameOverModal] = useModal();
@@ -167,9 +165,9 @@ function Wordle() {
             previousAttempts={previousAttempts}
             onClick={handleKeyPress}
           />
-          <Modal open={wizardOpen} heading={steps[activeStep].heading}>
+          <Modal open={wizardOpen} heading={MESSAGES.CHOOSE_DIFFICULTY}>
             {/* <Difficulty onSelect={chooseDifficulty} /> */}
-            <Wizard activeStep={activeStep} setActiveStep={setActiveStep} />
+            <Wizard />
           </Modal>
           <Modal open={gameOverModal} heading={gameOverMessage}>
             {gameOverMessage && (
