@@ -80,7 +80,11 @@ function Wordle() {
   }, [toggleGameOverModal, setTimer, setTimeup]);
   const handleKeyPress = useCallback(
     (event: Partial<KeyboardEvent>) => {
-      if ([MESSAGES.WIN, MESSAGES.TIME_UP].includes(gameOverMessage)) {
+      if (
+        [MESSAGES.WIN, MESSAGES.TIME_UP, MESSAGES.LOST].includes(
+          gameOverMessage
+        )
+      ) {
         return;
       }
       const secretLetterMap = SECRET ? getSecretLetterMap(SECRET) : {};
@@ -123,6 +127,10 @@ function Wordle() {
     setSecret();
     setTimer(0);
     pageLoadModalRef.current = false;
+  };
+  const onCloseGameOver = () => {
+    toggleGameOverModal();
+    setTimer(0);
   };
   useEffect(() => {
     if (!pageLoadModalRef.current) {
@@ -167,7 +175,13 @@ function Wordle() {
           <Modal open={wizardOpen} heading={MESSAGES.CHOOSE_DIFFICULTY}>
             <Difficulty onSelect={chooseDifficulty} />
           </Modal>
-          <Modal open={gameOverModal} heading={gameOverMessage}>
+          <Modal
+            open={gameOverModal}
+            heading={gameOverMessage}
+            onClose={() => {
+              onCloseGameOver();
+            }}
+          >
             {gameOverMessage && (
               <div>
                 {[MESSAGES.TIME_UP, MESSAGES.LOST].includes(

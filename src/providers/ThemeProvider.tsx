@@ -19,6 +19,7 @@ export const ThemeProvider = ({
       typography: { color: COLORS.WHITE },
       box: { ...genericDark },
       paper: { ...genericDark },
+      icon: { color: COLORS.WHITE },
     },
     light: {
       header: { ...genericLight },
@@ -26,6 +27,7 @@ export const ThemeProvider = ({
       typography: { color: COLORS.BLACK },
       box: { ...genericLight },
       paper: { ...genericLight },
+      icon: { color: COLORS.BLACK },
     },
   };
   const toggleTheme = () => {

@@ -67,7 +67,7 @@ export default function ResponsiveAppBar({
             paddingRight: { xs: "16px", md: "0px" },
           }}
         >
-          <Button
+          {/* <Button
             component={Link}
             to="/login"
             sx={{ ...typography }}
@@ -95,7 +95,7 @@ export default function ResponsiveAppBar({
             }}
           >
             Signup
-          </Button>
+          </Button> */}
         </ListItem>
       </List>
     </Box>

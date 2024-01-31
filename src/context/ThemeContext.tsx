@@ -11,7 +11,8 @@ export type themeSectionTypes =
   | "footer"
   | "typography"
   | "box"
-  | "paper";
+  | "paper"
+  | "icon";
 export type ThemeType = {
   [key in themeState]: { [key in themeSectionTypes]?: {} };
 };
